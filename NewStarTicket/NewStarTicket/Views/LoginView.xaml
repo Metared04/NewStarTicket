@@ -4,10 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewStarTicket.Views"
+        xmlns:viewModel="clr-namespace:NewStarTicket.ViewModels"
         mc:Ignorable="d"
         Title="Connection" Height="800" Width="600"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
+    <Window.DataContext>
+        <viewModel:LoginViewModel/>
+    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -25,12 +29,45 @@
         <StackPanel Grid.Row="0">
             <Image Source="/Assets/Images/logo3.png"/>
         </StackPanel>
-        <TextBox Grid.Row="1" Background="#1D375C" Foreground="White" Text="Nom du SOLDAT :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
+        <TextBlock Grid.Row="1" Background="#1D375C" Foreground="White" Text="Nom du SOLDAT :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
         <TextBox Grid.Row="2" Margin="0,5,0,10"  />
-        <TextBox Grid.Row="3" Background="#1D375C" Foreground="White" Text="Mot de passe :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
+        <TextBlock Grid.Row="3" Background="#1D375C" Foreground="White" Text="Mot de passe :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
         <TextBox Grid.Row="4" Margin="0,5,0,10" />
-        <TextBox Grid.Row="5" Background="#1D375C" Foreground="White" Text="Mot de passe oublier ? MINABLE !" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
-        <TextBox Grid.Row="6" Background="#1D375C" Foreground="White" Text="Rejoindre l'empire et le côté OBSCUR !" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
-        <Button Content="Do it !" Background="#DA0506" Foreground="White" Grid.Row="7" Height="30" Margin="0,5,0,10" HorizontalAlignment="Center" Width="418" FontFamily="Palatino Linotype" FontWeight="Bold" FontSize="15"/>
+        <Button Content="Mot de passe oublier ? MINABLE !"
+                Command="{Binding ExecuteDisplayForgetPasswordScreen}"
+                Grid.Row="5"
+                Height="30"
+                Margin="0,5,0,10"                
+                HorizontalAlignment="Center"
+                Width="400"
+                Background="#1D375C" 
+                Foreground="White"
+                FontFamily="Palatino Linotype" 
+                FontSize="20" 
+                FontWeight="Bold"/>
+        <Button Content="Rejoindre l'empire et le côté OBSCUR !"
+                Command="{Binding ExecuteDisplayRegisterScreen}"
+                Height="30"
+                Margin="0,5,0,10"
+                Grid.Row="6"
+                HorizontalAlignment="Center"
+                Width="400"
+                Background="#1D375C" 
+                Foreground="White"
+                FontFamily="Palatino Linotype" 
+                FontSize="20" 
+                FontWeight="Bold"/>
+        <Button Content="Do it !" 
+                Command="{Binding ExecuteLogin}"
+                Background="#DA0506" 
+                Foreground="White" 
+                Grid.Row="7" 
+                Height="30" 
+                Margin="0,5,0,10" 
+                HorizontalAlignment="Center" 
+                Width="418" 
+                FontFamily="Palatino Linotype" 
+                FontWeight="Bold" 
+                FontSize="15"/>
     </Grid>
 </Window>
