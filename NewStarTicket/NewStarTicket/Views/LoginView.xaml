@@ -5,16 +5,28 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NewStarTicket.Views"
         xmlns:viewModel="clr-namespace:NewStarTicket.ViewModels"
+        xmlns:customcontrols="clr-namespace:NewStarTicket.CustomControls"
         mc:Ignorable="d"
         Title="Connection" Height="800" Width="600"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize">
+    
     <Window.DataContext>
         <viewModel:LoginViewModel/>
     </Window.DataContext>
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+    </Window.Resources>
+    
+    <Window.Visibility>
+        <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
+    </Window.Visibility>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -30,11 +42,16 @@
             <Image Source="/Assets/Images/logo3.png"/>
         </StackPanel>
         <TextBlock Grid.Row="1" Background="#1D375C" Foreground="White" Text="Nom du SOLDAT :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
-        <TextBox Grid.Row="2" Margin="0,5,0,10"  />
+        <TextBox Text="{Binding UserName}" 
+                 Grid.Row="2" 
+                 Margin="0,5,0,10"/>
         <TextBlock Grid.Row="3" Background="#1D375C" Foreground="White" Text="Mot de passe :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
-        <TextBox Grid.Row="4" Margin="0,5,0,10" />
+        <customcontrols:BindablePasswordBox Password="{Binding Password}"
+                                            Grid.Row="4"
+                                            Margin="0,5,0,10"/>
+
         <Button Content="Mot de passe oublier ? MINABLE !"
-                Command="{Binding ExecuteDisplayForgetPasswordScreen}"
+                Command="{Binding DisplayForgetPasswordScreen}"
                 Grid.Row="5"
                 Height="30"
                 Margin="0,5,0,10"                
@@ -57,11 +74,18 @@
                 FontFamily="Palatino Linotype" 
                 FontSize="20" 
                 FontWeight="Bold"/>
+        <TextBlock Grid.Row="7"
+                   Text="{Binding ErrorMessage}"
+                   Foreground="Red"
+                   FontWeight="Bold"
+                   TextAlignment="Center"
+                   Margin="10,0,10,10"
+                   Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibility}}"/>
         <Button Content="Do it !" 
-                Command="{Binding ExecuteLogin}"
+                Command="{Binding LoginCommand}"
                 Background="#DA0506" 
                 Foreground="White" 
-                Grid.Row="7" 
+                Grid.Row="8" 
                 Height="30" 
                 Margin="0,5,0,10" 
                 HorizontalAlignment="Center" 
