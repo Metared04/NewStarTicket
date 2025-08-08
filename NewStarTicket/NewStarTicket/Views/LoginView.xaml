@@ -42,11 +42,11 @@
             <Image Source="/Assets/Images/logo3.png"/>
         </StackPanel>
         <TextBlock Grid.Row="1" Background="#1D375C" Foreground="White" Text="Nom du SOLDAT :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
-        <TextBox Text="{Binding UserName}" 
+        <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" 
                  Grid.Row="2" 
                  Margin="0,5,0,10"/>
         <TextBlock Grid.Row="3" Background="#1D375C" Foreground="White" Text="Mot de passe :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
-        <customcontrols:BindablePasswordBox Password="{Binding Password}"
+        <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             Grid.Row="4"
                                             Margin="0,5,0,10"/>
 

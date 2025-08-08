@@ -23,5 +23,6 @@ namespace NewStarTicket.Views
         {
             InitializeComponent();
         }
+
     }
 }
