@@ -1,7 +1,11 @@
-﻿using System;
+﻿using NewStarTicket.Models;
+using NewStarTicket.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -15,6 +19,8 @@ namespace NewStarTicket.ViewModels
         private SecureString _password;
         private string _errorMessage;
         private bool _isViewVisible = true;
+
+        private IUserRepository userRepository;
 
         public string UserName 
         {
@@ -73,6 +79,7 @@ namespace NewStarTicket.ViewModels
         // Constructeur
         public LoginViewModel()
         {
+            userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
             ShowRegisterScreenCommand = new ViewModelCommand(ExecuteShowRegisterScreenCommand);
             DisplayForgetPasswordScreen = new ViewModelCommand(ExecuteDisplayForgetPasswordScreen);
@@ -92,39 +99,45 @@ namespace NewStarTicket.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            // TODO: Implémenter la logique de connexion
-            try
+            var isValidUser = userRepository.AuthenticateUser(new NetworkCredential(UserName, Password));
+            if (isValidUser)
             {
-                // Ici vous ajouterez la logique pour vérifier les identifiants
-                // avec votre service d'authentification
-
-                // Exemple de structure :
-                // var authService = new AuthenticationService();
-                // var user = authService.Login(UserName, Password);
-                // if (user != null)
-                // {
-                //     // Connexion réussie - naviguer vers l'écran principal
-                //     IsViewVisible = false;
-                // }
-                // else
-                // {
-                //     ErrorMessage = "Identifiants incorrects";
-                // }
-
-                ErrorMessage = "Fonctionnalité à implémenter";
-            }
-            catch (Exception ex)
+                Thread.CurrentPrincipal = new GenericPrincipal(
+                    new GenericIdentity(UserName), null);
+                IsViewVisible = false;
+            } else
             {
-                ErrorMessage = $"Erreur lors de la connexion : {ex.Message}";
+                ErrorMessage = "Nom d'utilisateur ou mdp incorrecte.";
             }
+                // TODO: Implémenter la logique de connexion
+                try
+                {
+                    // Ici ajouter la logique pour vérifier les identifiants
+                    // avec service d'authentification
+
+                    // Exemple de structure :
+                    // var authService = new AuthenticationService();
+                    // var user = authService.Login(UserName, Password);
+                    // if (user != null)
+                    // {
+                    //     // Connexion réussie - naviguer vers l'écran principal
+                    //     IsViewVisible = false;
+                    // }
+                    // else
+                    // {
+                    //     ErrorMessage = "Identifiants incorrects";
+                    // }
+
+                    ErrorMessage = "Fonctionnalité à implémenter";
+                }
+                catch (Exception ex)
+                {
+                    ErrorMessage = $"Erreur lors de la connexion : {ex.Message}";
+                }
         }
         private void ExecuteShowRegisterScreenCommand(object obj)
         {
             // TODO: Navigation vers l'écran d'inscription
-            // Exemple : 
-            // var registerView = new RegisterView();
-            // registerView.Show();
-            // IsViewVisible = false;
             throw new NotImplementedException("Navigation vers RegisterView à implémenter");
         }
 
