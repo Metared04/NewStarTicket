@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using NewStarTicket.Models;
 using System;
 using System.Collections.Generic;
@@ -51,7 +52,30 @@ namespace NewStarTicket.Repositories
 
         public User GetUserByUsername(string username)
         {
-            throw new NotImplementedException();
+            User user=null;
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select * from [UserTable] where NameUser=@username";
+                command.Parameters.Add("@username", SqlDbType.NVarChar).Value = username;
+                using (var reader = command.ExecuteReader())
+                {
+                    if(reader.Read())
+                    {
+                        user = new User()
+                        {
+                            IdUser = reader[0].ToString(),
+                            NameUser = reader[1].ToString(),
+                            PasswordUser = string.Empty,
+                            EmailUser = reader[3].ToString(),
+                            UserIdLevel = Convert.ToInt32(reader[4]),
+                        };
+                    }
+                }
+            }
+            return user;
         }
 
         public void Remove(int IdUser)

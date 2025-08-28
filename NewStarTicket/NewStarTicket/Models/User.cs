@@ -8,12 +8,12 @@ namespace NewStarTicket.Models
 {
     public class User
     {
-        private int idUser;
+        private string idUser;
         private string nameUser;
         private string passwordUser;
         private string emailUser;
         private int userIdLevel;
-        public int IdUser { get; set; }
+        public string IdUser { get; set; }
         public string NameUser { get; set; }
         public string PasswordUser { get; set; }
         public string EmailUser { get; set; }
