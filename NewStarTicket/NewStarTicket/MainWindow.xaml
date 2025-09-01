@@ -14,21 +14,23 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="125"/>
-            <ColumnDefinition />
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
             <ImageBrush ImageSource="/Assets/Images/back-image1.png" Stretch="UniformToFill"/>
         </Grid.Background>
-        
+
         <StackPanel Grid.Row="0"
                     Grid.Column="0">
             <Image Source="/Assets/Images/logo2.png" Width="125"/>
         </StackPanel>
-        
+
+        <!-- Message de bienvenu -->
+
         <TextBlock Text="{Binding CurrentUserAccount.DisplayName}"
                    FontSize="30"
                    HorizontalAlignment="Center"
@@ -36,6 +38,8 @@
                    Foreground="Wheat"
                    Grid.Row="0"
                    Grid.Column="1"/>
+        
+        <!-- Barre de controle (la ou il y'a les boutons qui gerent l'affichage des menus -->
 
         <StackPanel Grid.Row="1"
                     Grid.ColumnSpan="2"
@@ -54,5 +58,13 @@
                 <TextBlock Text="Statistiques" Style="{StaticResource menuButtonText}"/>
             </RadioButton>
         </StackPanel>
+        
+        <!-- Partie contenu principal, avec la vue enfant -->
+
+        <ContentControl Content=""
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="25"/>
+
     </Grid>
 </Window>
