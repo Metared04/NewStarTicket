@@ -20,7 +20,9 @@
     </Window.Resources>
 
     <Window.Visibility>
-        <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
+        <Binding Path="IsViewVisible" 
+                 Mode="TwoWay" 
+                 Converter="{StaticResource BooleanToVisibility}"/>
     </Window.Visibility>
 
     <Grid>
@@ -36,16 +38,33 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/Images/back-image1.jpg" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="/Assets/Images/back-image1.jpg" 
+                        Stretch="UniformToFill"/>
         </Grid.Background>
         <StackPanel Grid.Row="0">
             <Image Source="/Assets/Images/logo3.png"/>
         </StackPanel>
-        <TextBlock Grid.Row="1" Background="#1D375C" Foreground="White" Text="Nom du SOLDAT :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
+        <TextBlock Grid.Row="1" 
+                   Background="{StaticResource color2}" 
+                   Foreground="{StaticResource whiteColor}" 
+                   Text="Nom du SOLDAT :" 
+                   TextAlignment="Center" 
+                   FontFamily="Palatino Linotype" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   Padding="35,0,0,0"/>
         <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" 
                  Grid.Row="2" 
                  Margin="0,5,0,10"/>
-        <TextBlock Grid.Row="3" Background="#1D375C" Foreground="White" Text="Mot de passe :" TextAlignment="Center" FontFamily="Palatino Linotype" FontSize="20" FontWeight="Bold" Padding="35,0,0,0"/>
+        <TextBlock Grid.Row="3" 
+                   Background="{StaticResource color2}" 
+                   Foreground="{StaticResource whiteColor}" 
+                   Text="Mot de passe :" 
+                   TextAlignment="Center" 
+                   FontFamily="Palatino Linotype" 
+                   FontSize="20" 
+                   FontWeight="Bold" 
+                   Padding="35,0,0,0"/>
         <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             Grid.Row="4"
                                             Margin="0,5,0,10"/>
@@ -57,8 +76,8 @@
                 Margin="0,5,0,10"                
                 HorizontalAlignment="Center"
                 Width="400"
-                Background="#1D375C" 
-                Foreground="White"
+                Background="{StaticResource color2}" 
+                Foreground="{StaticResource whiteColor}" 
                 FontFamily="Palatino Linotype" 
                 FontSize="20" 
                 FontWeight="Bold"/>
@@ -69,22 +88,22 @@
                 Grid.Row="6"
                 HorizontalAlignment="Center"
                 Width="400"
-                Background="#1D375C" 
-                Foreground="White"
+                Background="{StaticResource color2}" 
+                Foreground="{StaticResource whiteColor}" 
                 FontFamily="Palatino Linotype" 
                 FontSize="20" 
                 FontWeight="Bold"/>
         <TextBlock Grid.Row="7"
                    Text="{Binding ErrorMessage}"
-                   Foreground="Red"
+                   Foreground="{StaticResource errorMessage}"
                    FontWeight="Bold"
                    TextAlignment="Center"
                    Margin="10,0,10,10"
                    Visibility="{Binding ErrorMessage, Converter={StaticResource BooleanToVisibility}}"/>
         <Button Content="Do it !" 
                 Command="{Binding LoginCommand}"
-                Background="#DA0506" 
-                Foreground="White" 
+                Background="{StaticResource color1}" 
+                Foreground="{StaticResource whiteColor}" 
                 Grid.Row="8" 
                 Height="30" 
                 Margin="0,5,0,10" 
