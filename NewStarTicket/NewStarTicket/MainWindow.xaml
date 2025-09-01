@@ -19,6 +19,14 @@
             <views:TicketListView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModel:DashBoardViewModel}">
+            <views:DashboardView/>
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewModel:StatisticViewModel}">
+            <views:StatisticView/>
+        </DataTemplate>
+
     </Window.Resources>
 
     <Grid>
@@ -59,7 +67,9 @@
                     Orientation="Horizontal"
                     Background="{StaticResource color2}">
             <RadioButton Style="{StaticResource menuButton}" 
-                         Tag="{StaticResource whiteColor}">
+                         Tag="{StaticResource whiteColor}"
+                         Command="{Binding ShowDashboardCommand}"
+                         IsChecked="True">
                 <TextBlock Text="Tabeau de bord" Style="{StaticResource menuButtonText}"/>
             </RadioButton>
             <RadioButton Style="{StaticResource menuButton}" 
@@ -68,7 +78,8 @@
                 <TextBlock Text="Ticket" Style="{StaticResource menuButtonText}"/>
             </RadioButton>
             <RadioButton Style="{StaticResource menuButton}" 
-                         Tag="{StaticResource whiteColor}">
+                         Tag="{StaticResource whiteColor}"
+                         Command="{Binding ShowStatisticCommand}">
                 <TextBlock Text="Statistiques" Style="{StaticResource menuButtonText}"/>
             </RadioButton>
         </StackPanel>

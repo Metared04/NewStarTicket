@@ -15,6 +15,7 @@ namespace NewStarTicket.ViewModels
         // Champs
         private UserAccountModel _currentUserAccount;
         private ViewModelBase _currentChildView;
+        private string _caption;
 
         private IUserRepository userRepository;
 
@@ -47,9 +48,24 @@ namespace NewStarTicket.ViewModels
             }
         }
 
+        public string Caption
+        {
+            get
+            {
+                return _caption;
+            }
+            set
+            {
+                _caption = value;
+                OnPropertyChanged(nameof(Caption));
+            }
+        }
+
         // Commandes
 
         public ICommand ShowTicketListCommand { get; }
+        public ICommand ShowDashboardCommand { get; }
+        public ICommand ShowStatisticCommand { get; }
 
         public MainViewModel()
         {
@@ -59,17 +75,32 @@ namespace NewStarTicket.ViewModels
             // Initialisation des commandes
 
             ShowTicketListCommand = new ViewModelCommand(ExecuteShowTicketListCommand);
+            ShowDashboardCommand = new ViewModelCommand(ExecuteShowDashboardCommand);
+            ShowStatisticCommand = new ViewModelCommand(ExecuteShowStatisticCommand);
 
             // View par defaut
 
-            ExecuteShowTicketListCommand(null);
+            ExecuteShowDashboardCommand(null);
 
             LoadCurrentUserData();
+        }
+
+        private void ExecuteShowStatisticCommand(object obj)
+        {
+            CurrentChildView = new StatisticViewModel();
+            Caption = "Statistiques";
+        }
+
+        private void ExecuteShowDashboardCommand(object obj)
+        {
+            CurrentChildView = new DashBoardViewModel();
+            Caption = "Dashboard";
         }
 
         private void ExecuteShowTicketListCommand(object obj)
         {
             CurrentChildView = new TicketListViewModel();
+            Caption = "Liste tickets";
         }
 
         private void LoadCurrentUserData()
