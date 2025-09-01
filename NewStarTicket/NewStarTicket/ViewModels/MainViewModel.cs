@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using NewStarTicket.Models;
 using NewStarTicket.Repositories;
 
@@ -13,7 +14,11 @@ namespace NewStarTicket.ViewModels
     {
         // Champs
         private UserAccountModel _currentUserAccount;
+        private ViewModelBase _currentChildView;
+
         private IUserRepository userRepository;
+
+        // Propriétés
 
         public UserAccountModel CurrentUserAccount 
         { 
@@ -27,11 +32,44 @@ namespace NewStarTicket.ViewModels
                 OnPropertyChanged(nameof(CurrentUserAccount));
             }
         }
+
+        public ViewModelBase CurrentChildView
+        {
+            get 
+            {
+                return _currentChildView; 
+            }
+            set
+            {
+
+                _currentChildView = value;
+                OnPropertyChanged(nameof(CurrentChildView));
+            }
+        }
+
+        // Commandes
+
+        public ICommand ShowTicketListCommand { get; }
+
         public MainViewModel()
         {
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
+
+            // Initialisation des commandes
+
+            ShowTicketListCommand = new ViewModelCommand(ExecuteShowTicketListCommand);
+
+            // View par defaut
+
+            ExecuteShowTicketListCommand(null);
+
             LoadCurrentUserData();
+        }
+
+        private void ExecuteShowTicketListCommand(object obj)
+        {
+            CurrentChildView = new TicketListViewModel();
         }
 
         private void LoadCurrentUserData()
