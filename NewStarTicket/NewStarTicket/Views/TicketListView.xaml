@@ -49,6 +49,9 @@
                 <DataGridTextColumn Header="Utilisateur" 
                                     Binding="{Binding UserBroadcastedTicketName}" 
                                     Width="100"/>
+                <DataGridTextColumn Header="Status"
+                                    Binding="{Binding StatusIdTicket}"
+                                    Width="50"/>
                 <DataGridTemplateColumn Header="Option" 
                                         Width="150">
                     <DataGridTemplateColumn.CellTemplate>

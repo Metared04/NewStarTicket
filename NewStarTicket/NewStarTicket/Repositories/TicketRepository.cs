@@ -1,4 +1,5 @@
 ﻿using Microsoft.Data.SqlClient;
+using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
 using NewStarTicket.Models;
 using System;
 using System.Collections.Generic;
@@ -58,7 +59,7 @@ namespace NewStarTicket.Repositories
                             UserBroadcastedIdTicket = (Guid)reader["UserBroadcastedIdTicket"],
                             UserResolvedIdTicket = reader["UserResolvedIdTicket"] as Guid?,
                             UserBroadcastedTicketName = reader["UserBroadcastedName"].ToString(),
-                            UserResovelvedTicketName = reader["UserResolvedName"] as string,
+                            UserResovelvedTicketName = reader["UserResolvedName"]?.ToString(),
                         };
                         ticketsList.Add(ticket);
                     }
@@ -70,7 +71,50 @@ namespace NewStarTicket.Repositories
 
         public IEnumerable<Ticket> GetAllByUserId(Guid userId)
         {
-            throw new NotImplementedException();
+            List<Ticket> ticketsList = new List<Ticket>();
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"
+            SELECT t.IdTicket, t.TitleTicket, t.DescriptionTicket, 
+                   t.BroadcastDateTicket, t.ResolvedDateTicket, 
+                   t.StatusIdTicket, t.EmergencyLevelIdTicket, 
+                   t.EquipmentIdTicket, t.LocationIdTicket, 
+                   t.UserBroadcastedIdTicket, t.UserResolvedIdTicket,
+                   ub.NameUser AS UserBroadcastedName,
+                   ur.NameUser AS UserResolvedName
+            FROM TicketTable t
+            INNER JOIN UserTable ub ON t.UserBroadcastedIdTicket = ub.IdUser
+            LEFT JOIN UserTable ur ON t.UserResolvedIdTicket = ur.IdUser
+            where t.UserBroadcastedIdTicket = @userid";
+                command.Parameters.Add("@userid", SqlDbType.UniqueIdentifier).Value = userId;
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        var ticket = new Ticket
+                        {
+                            IdTicket = (Guid)reader["IdTicket"],
+                            TitleTicket = reader["TitleTicket"].ToString(),
+                            DescriptionTicket = reader["DescriptionTicket"]?.ToString(),
+                            BroadcastDateTicket = (DateTime)reader["BroadcastDateTicket"],
+                            ResolvedDateTicket = reader["ResolvedDateTicket"] as DateTime?,
+                            StatusIdTicket = (int)reader["StatusIdTicket"],
+                            EmergencyLevelIdTicket = (int)reader["EmergencyLevelIdTicket"],
+                            EquipmentIdTicket = (int)reader["EquipmentIdTicket"],
+                            LocationIdTicket = (int)reader["LocationIdTicket"],
+                            UserBroadcastedIdTicket = (Guid)reader["UserBroadcastedIdTicket"],
+                            UserResolvedIdTicket = reader["UserResolvedIdTicket"] as Guid?,
+                            UserBroadcastedTicketName = reader["UserBroadcastedName"].ToString(),
+                            UserResovelvedTicketName = reader["UserResolvedName"]?.ToString(),
+                        };
+                        ticketsList.Add(ticket);
+                    }
+                }
+            }
+            return ticketsList;
         }
 
         public Ticket GetTicketById(int IdTicket)
