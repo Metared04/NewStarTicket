@@ -73,7 +73,8 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Etat ticket" 
-                                    Width="100">
+                                        Width="100"
+                                        Visibility="{Binding AdminColumnVisibility}">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
