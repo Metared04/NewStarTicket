@@ -45,7 +45,7 @@ namespace NewStarTicket.Repositories
             throw new NotImplementedException();
         }
 
-        public User GetUserById(int IdUser)
+        public User GetUserById(Guid IdUser)
         {
             throw new NotImplementedException();
         }
@@ -66,7 +66,7 @@ namespace NewStarTicket.Repositories
                     {
                         user = new User()
                         {
-                            IdUser = reader[0].ToString(),
+                            IdUser = (Guid)reader[0],
                             NameUser = reader[1].ToString(),
                             PasswordUser = string.Empty,
                             EmailUser = reader[3].ToString(),
@@ -77,8 +77,7 @@ namespace NewStarTicket.Repositories
             }
             return user;
         }
-
-        public void Remove(int IdUser)
+        public void Remove(Guid IdUser)
         {
             throw new NotImplementedException();
         }

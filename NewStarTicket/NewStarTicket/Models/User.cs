@@ -8,16 +8,17 @@ namespace NewStarTicket.Models
 {
     public class User
     {
-        private string idUser;
+        private Guid idUser;
         private string nameUser;
         private string passwordUser;
         private string emailUser;
         private int userIdLevel;
-        public string IdUser { get; set; }
+        public Guid IdUser { get; set; }
         public string NameUser { get; set; }
         public string PasswordUser { get; set; }
         public string EmailUser { get; set; }
         public int UserIdLevel { get; set; }
         public UserLevel UserLevel { get; set; }
+        public bool IsAdmin => UserIdLevel > 1;
     }
 }

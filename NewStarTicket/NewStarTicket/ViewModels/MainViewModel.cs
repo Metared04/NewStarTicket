@@ -31,8 +31,11 @@ namespace NewStarTicket.ViewModels
             {
                 _currentUserAccount = value;
                 OnPropertyChanged(nameof(CurrentUserAccount));
+                OnPropertyChanged(nameof(IsAdmin));
             }
         }
+
+        public bool IsAdmin => CurrentUserAccount?.IsAdmin ?? false;
 
         public ViewModelBase CurrentChildView
         {
@@ -99,18 +102,26 @@ namespace NewStarTicket.ViewModels
 
         private void ExecuteShowTicketListCommand(object obj)
         {
-            CurrentChildView = new TicketListViewModel();
+            CurrentChildView = new TicketListViewModel(CurrentUserAccount);
             Caption = "Liste tickets";
         }
+        /*
+        private bool CanExecuteShowTicketListCommand(object obj)
+        {
+            return (IsAdmin);
+        }
+        */
 
         private void LoadCurrentUserData()
         {
             var user = userRepository.GetUserByUsername(Thread.CurrentPrincipal.Identity.Name);
             if(user != null)
             {
+                CurrentUserAccount.Id = user.IdUser;
                 CurrentUserAccount.Username = user.NameUser;
-                CurrentUserAccount.DisplayName = $"Bonjour, {user.NameUser}, {user.EmailUser}";
+                CurrentUserAccount.DisplayName = $"Bonjour, {user.NameUser}, {user.EmailUser}, {user.IsAdmin}";
                 CurrentUserAccount.ProfilePicture = null;
+                CurrentUserAccount.IsAdmin = user.IsAdmin;
             } else
             {
                 CurrentUserAccount.DisplayName="Utilisateur inconnu";

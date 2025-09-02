@@ -12,8 +12,8 @@ namespace NewStarTicket.Models
         bool AuthenticateUser(NetworkCredential credential);
         void Add(User user);
         void Edit(User user);
-        void Remove(int IdUser);
-        User GetUserById(int IdUser);
+        void Remove(Guid IdUser);
+        User GetUserById(Guid IdUser);
         User GetUserByUsername(string username);
         IEnumerable<User> GetByAll();
 

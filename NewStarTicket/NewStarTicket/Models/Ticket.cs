@@ -8,7 +8,7 @@ namespace NewStarTicket.Models
 {
     public class Ticket
     {
-        public int IdTicket { get; set; }
+        public Guid IdTicket { get; set; }
         public string TitleTicket { get; set; }
         public string DescriptionTicket { get; set; }
         public DateTime BroadcastDateTicket { get; set; }
@@ -21,7 +21,9 @@ namespace NewStarTicket.Models
         public Equipment Equipment { get; set; }
         public int LocationIdTicket { get; set; }
         public Location Location { get; set; }
-        public int UserBroadcastedIdTicket { get; set; }
-        public int UserResolvedIdTicket { get; set; }
+        public Guid UserBroadcastedIdTicket { get; set; }
+        public Guid? UserResolvedIdTicket { get; set; }
+        public string UserBroadcastedTicketName { get; set; }
+        public string? UserResovelvedTicketName { get; set; }
     }
 }

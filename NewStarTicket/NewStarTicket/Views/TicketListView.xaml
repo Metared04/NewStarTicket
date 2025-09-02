@@ -5,49 +5,55 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:NewStarTicket.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="570" d:DesignWidth="1025">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="400"/>
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal"
-                VerticalAlignment="Top"
-                Grid.Row="0">
-            <TextBox Text="Rechercher ..."/>
-            <Button Name="searchButton"/>
+                    VerticalAlignment="Top"
+                    Grid.Row="0">
+            <TextBox Text="Rechercher ..."
+                     Width="300"
+                     Height="30"/>
+            <Button Name="searchButton"
+                    Content="Chercher"
+                    Margin="5,0,0,0"/>
         </StackPanel>
 
 
-        <DataGrid ItemsSource="{Binding Tickets}" 
-              AutoGenerateColumns="False" 
-              HeadersVisibility="Column" 
-              CanUserAddRows="False" 
-              GridLinesVisibility="Horizontal" 
-              Grid.Row="1"
-              FontFamily="Palatino Linotype">
+        <DataGrid ItemsSource="{Binding CurrentTicketList}" 
+                  AutoGenerateColumns="False" 
+                  HeadersVisibility="Column" 
+                  CanUserAddRows="False" 
+                  GridLinesVisibility="Horizontal" 
+                  Grid.Row="1"
+                  FontFamily="Palatino Linotype"
+                  VerticalAlignment="Stretch"
+                  HorizontalAlignment="Stretch">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="ID" 
-                                Binding="{Binding IdTicket}" 
-                                Width="50"/>
+                <DataGridTextColumn Header="ID Ticket" 
+                                    Binding="{Binding IdTicket}" 
+                                    Width="150"/>
                 <DataGridTextColumn Header="Titre" 
-                                Binding="{Binding TitleTicket}" 
-                                Width="217"/>
+                                    Binding="{Binding TitleTicket}" 
+                                    Width="*"/>
                 <DataGridTextColumn Header="Date d'emission" 
-                                Binding="{Binding BroadcastDateTicket}" 
-                                Width="160"/>
+                                    Binding="{Binding BroadcastDateTicket}" 
+                                    Width="120"/>
                 <DataGridTextColumn Header="Niveau d'urgence" 
-                                Binding="{Binding EmergencyLevelIdTicket}" 
-                                Width="80"/>
+                                    Binding="{Binding EmergencyLevelIdTicket}" 
+                                    Width="50"/>
                 <DataGridTextColumn Header="Utilisateur" 
-                                Binding="{Binding UserIdTicket}" 
-                                Width="80"/>
+                                    Binding="{Binding UserBroadcastedTicketName}" 
+                                    Width="100"/>
                 <DataGridTemplateColumn Header="Option" 
-                                    Width="80">
+                                        Width="150">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <StackPanel>
+                            <StackPanel Orientation="Horizontal">
                                 <Button Content="Voir" 
                                     Command="{Binding DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}" 
@@ -64,7 +70,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
                 <DataGridTemplateColumn Header="Etat ticket" 
-                                    Width="80">
+                                    Width="100">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel>
