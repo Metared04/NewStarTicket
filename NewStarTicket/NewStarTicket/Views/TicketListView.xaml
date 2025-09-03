@@ -58,7 +58,7 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <Button Content="Voir" 
-                                    Command="{Binding DataContext.ViewCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
+                                    Command="{Binding DataContext.ShowTicketInfosCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}"
                                     CommandParameter="{Binding}" 
                                     Width="60"/>
                                 <Button Content="Supprimer" 

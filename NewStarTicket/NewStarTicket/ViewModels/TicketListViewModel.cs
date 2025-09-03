@@ -1,5 +1,6 @@
 ﻿using NewStarTicket.Models;
 using NewStarTicket.Repositories;
+using NewStarTicket.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +17,7 @@ namespace NewStarTicket.ViewModels
         private ObservableCollection<Ticket> _currentTicketList;
         private bool _isCurrentUserAdmin;
         private Guid _currentUserGuid;
+        private ViewModelBase _ticketInfosView;
 
         private ITicketRepository ticketRepository;
 
@@ -55,6 +57,20 @@ namespace NewStarTicket.ViewModels
             {
                 _currentUserGuid = value;
                 OnPropertyChanged(nameof(CurrentUserGuid));
+            }
+        }
+
+        public ViewModelBase TicketInfosView
+        {
+            get
+            {
+                return _ticketInfosView;
+            }
+            set
+            {
+
+                _ticketInfosView = value;
+                OnPropertyChanged(nameof(TicketInfosView));
             }
         }
 
@@ -104,7 +120,13 @@ namespace NewStarTicket.ViewModels
         {
             // Ouvrir un fenetre a part avec les infos du ticket
             var ticket = obj as Ticket;
-            return;
+            TicketInfosView = new TicketDetailsViewModel(ticket);
+            var window = new TicketDetailsView
+            {
+                DataContext = TicketInfosView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
         }
 
         private void ExecuteDeleteTicketCommand(object obj)
