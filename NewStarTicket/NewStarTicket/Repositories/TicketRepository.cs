@@ -182,10 +182,17 @@ namespace NewStarTicket.Repositories
         {
             throw new NotImplementedException();
         }
-
         public void Remove(Ticket ticket)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Delete from [TicketTable] Where IdTicket = @id";
+                command.Parameters.Add("@Id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
         }
     }
 }

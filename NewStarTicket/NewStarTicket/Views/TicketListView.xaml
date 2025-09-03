@@ -64,7 +64,7 @@
                                 <Button Content="Supprimer" 
                                     Background="Red" 
                                     Foreground="White" 
-                                    Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    Command="{Binding DataContext.DeleteTicketCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                     CommandParameter="{Binding}" 
                                     Width="75"/>
                             </StackPanel>

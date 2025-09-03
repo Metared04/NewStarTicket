@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace NewStarTicket.ViewModels
 {
@@ -45,10 +46,24 @@ namespace NewStarTicket.ViewModels
 
         public Visibility AdminColumnVisibility => IsCurrentUserAdmin ? Visibility.Visible : Visibility.Collapsed;
 
+        // Commandes
+        public ICommand ShowTicketInfosCommand { get; }
+        public ICommand DeleteTicketCommand { get; }
+        public ICommand TakeTicketCommand { get; }
+        public ICommand FinishingTicketCommand { get; }
+
         public TicketListViewModel(UserAccountModel currentUser)
         {
             ticketRepository = new TicketRepository();
             IsCurrentUserAdmin = currentUser.IsAdmin;
+
+            // Initialisation des commandes
+
+            ShowTicketInfosCommand = new ViewModelCommand(ExecuteShowTicketInfosCommand);
+            DeleteTicketCommand = new ViewModelCommand(ExecuteDeleteTicketCommand, CanExecuteDeleteTicketCommand);
+
+            // View par defaut
+
             LoadTicketDataList(currentUser);
         }
 
@@ -66,6 +81,34 @@ namespace NewStarTicket.ViewModels
             }
 
             CurrentTicketList = new ObservableCollection<Ticket>(ticketsList);
+        }
+
+        private void ExecuteShowTicketInfosCommand(object obj)
+        {
+            // Ouvrir un fenetre a part avec les infos du ticket
+            var ticket = obj as Ticket;
+            return;
+        }
+
+        private void ExecuteDeleteTicketCommand(object obj)
+        {
+            var ticket = obj as Ticket;
+            if (ticket == null) return;
+            var result = MessageBox.Show($"Supprimer le ticket \"{ticket.TitleTicket}\" ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result != MessageBoxResult.Yes) return;
+            try
+            {
+                ticketRepository.Remove(ticket);
+                CurrentTicketList.Remove(ticket);
+                MessageBox.Show("Ticket supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la suppression : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private bool CanExecuteDeleteTicketCommand(object obj)
+        {
+            return IsCurrentUserAdmin;
         }
     }
 }
