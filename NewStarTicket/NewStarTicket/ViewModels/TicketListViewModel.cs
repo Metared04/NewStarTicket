@@ -166,8 +166,9 @@ namespace NewStarTicket.ViewModels
                 try
                 {
                     ticketRepository.EditStatus(ticket, 4);
-                    //CurrentTicketList.Remove(ticket);
                     MessageBox.Show("Ticket validé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ticket.StatusIdTicket = 4;
+                    CommandManager.InvalidateRequerySuggested();
                 } catch (Exception ex)
                 {
                     MessageBox.Show($"Erreur lors de la validation : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -179,8 +180,9 @@ namespace NewStarTicket.ViewModels
                 try
                 {
                     ticketRepository.EditStatus(ticket, 3);
-                    //CurrentTicketList.Remove(ticket);
                     MessageBox.Show("Ticket echoué avec succès(?)", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    ticket.StatusIdTicket = 3;
+                    CommandManager.InvalidateRequerySuggested();
                 }
                 catch (Exception ex)
                 {
@@ -191,7 +193,8 @@ namespace NewStarTicket.ViewModels
 
         private bool CanExecuteFinishingTicketCommand(object obj)
         {
-            var ticket = obj as Ticket;
+            if (obj is not Ticket ticket)
+                return false;
             return ticket.StatusIdTicket == 1 || ticket.StatusIdTicket == 2;
         }
     }

@@ -86,7 +86,7 @@
                                     Margin="0,2"/>
                                 <Button Content="Terminer !" 
                                     Background="LightGreen" 
-                                    Command="{Binding DataContext.FinishCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    Command="{Binding DataContext.FinishingTicketCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                     CommandParameter="{Binding}" 
                                     Width="100" 
                                     Margin="0,2"/>

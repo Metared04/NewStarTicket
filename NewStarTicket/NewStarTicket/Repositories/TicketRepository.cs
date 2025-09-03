@@ -28,9 +28,9 @@ namespace NewStarTicket.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "UPDATE [TicketTable] Set StatusIdTicket = @status Where IdTicket = @id";
-                //, ticket_resolved_date = @date
-                command.Parameters.Add("@status", SqlDbType.UniqueIdentifier).Value = newStatusId;
+                command.CommandText = "UPDATE [TicketTable] Set StatusIdTicket = @status, ResolvedDateTicket = @date Where IdTicket = @id";
+                command.Parameters.Add("@status", SqlDbType.Int).Value = newStatusId;
+                command.Parameters.Add("@date", SqlDbType.DateTime).Value = DateTime.Now;
                 command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
                 int rowsAffected = command.ExecuteNonQuery();
             }
@@ -66,7 +66,8 @@ namespace NewStarTicket.Repositories
                    ur.NameUser AS UserResolvedName
             FROM TicketTable t
             INNER JOIN UserTable ub ON t.UserBroadcastedIdTicket = ub.IdUser
-            LEFT JOIN UserTable ur ON t.UserResolvedIdTicket = ur.IdUser";
+            LEFT JOIN UserTable ur ON t.UserResolvedIdTicket = ur.IdUser
+            order by t.StatusIdTicket";
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -114,7 +115,8 @@ namespace NewStarTicket.Repositories
             FROM TicketTable t
             INNER JOIN UserTable ub ON t.UserBroadcastedIdTicket = ub.IdUser
             LEFT JOIN UserTable ur ON t.UserResolvedIdTicket = ur.IdUser
-            where t.UserBroadcastedIdTicket = @userid";
+            where t.UserBroadcastedIdTicket = @userid
+            order by t.StatusIdTicket";
                 command.Parameters.Add("@userid", SqlDbType.UniqueIdentifier).Value = userId;
                 using (var reader = command.ExecuteReader())
                 {
