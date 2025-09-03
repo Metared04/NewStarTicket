@@ -15,6 +15,7 @@ namespace NewStarTicket.ViewModels
     {
         private ObservableCollection<Ticket> _currentTicketList;
         private bool _isCurrentUserAdmin;
+        private Guid _currentUserGuid;
 
         private ITicketRepository ticketRepository;
 
@@ -44,6 +45,19 @@ namespace NewStarTicket.ViewModels
             } 
         }
 
+        public Guid CurrentUserGuid
+        {
+            get
+            {
+                return _currentUserGuid;
+            }
+            set
+            {
+                _currentUserGuid = value;
+                OnPropertyChanged(nameof(CurrentUserGuid));
+            }
+        }
+
         public Visibility AdminColumnVisibility => IsCurrentUserAdmin ? Visibility.Visible : Visibility.Collapsed;
 
         // Commandes
@@ -56,11 +70,14 @@ namespace NewStarTicket.ViewModels
         {
             ticketRepository = new TicketRepository();
             IsCurrentUserAdmin = currentUser.IsAdmin;
+            CurrentUserGuid = currentUser.Id;
 
             // Initialisation des commandes
 
             ShowTicketInfosCommand = new ViewModelCommand(ExecuteShowTicketInfosCommand);
             DeleteTicketCommand = new ViewModelCommand(ExecuteDeleteTicketCommand, CanExecuteDeleteTicketCommand);
+            TakeTicketCommand = new ViewModelCommand(ExecuteTakeTicketCommand, CanExecuteTakeTicketCommand);
+            FinishingTicketCommand = new ViewModelCommand(ExecuteFinishingTicketCommand, CanExecuteFinishingTicketCommand);
 
             // View par defaut
 
@@ -109,6 +126,73 @@ namespace NewStarTicket.ViewModels
         private bool CanExecuteDeleteTicketCommand(object obj)
         {
             return IsCurrentUserAdmin;
+        }
+        private void ExecuteTakeTicketCommand(object obj)
+        {
+            var ticket = obj as Ticket;
+            if (ticket == null) return;
+            // Le status passe de 1 a 2 et on met l'id du mec
+            try
+            {
+                ticketRepository.TakingTicket(ticket, CurrentUserGuid);
+                MessageBox.Show("Ticket recuperer avec succès(?)", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                ticket.StatusIdTicket = 2;
+                ticket.UserResolvedIdTicket = CurrentUserGuid;
+                CommandManager.InvalidateRequerySuggested();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de la recuperation : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private bool CanExecuteTakeTicketCommand(object obj)
+        {
+            if (!IsCurrentUserAdmin)
+                return false;
+            if (obj is not Ticket ticket)
+                return false;
+            return ticket.StatusIdTicket == 1;
+        }
+        private void ExecuteFinishingTicketCommand(object obj)
+        {
+            var ticket = obj as Ticket;
+            if (ticket == null) return;
+            // Si l'utilisateur est un admin, c'est le fonctionnement normal.
+            // Sinon le bouton devient le bouton "annule" et le met le status sur annulé
+            if (IsCurrentUserAdmin)
+            {
+                var result = MessageBox.Show($"Valider le ticket \"{ticket.TitleTicket}\" ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes) return;
+                try
+                {
+                    ticketRepository.EditStatus(ticket, 4);
+                    //CurrentTicketList.Remove(ticket);
+                    MessageBox.Show("Ticket validé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                } catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur lors de la validation : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            } else
+            {
+                var result = MessageBox.Show($"ANNULER le ticket \"{ticket.TitleTicket}\" ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (result != MessageBoxResult.Yes) return;
+                try
+                {
+                    ticketRepository.EditStatus(ticket, 3);
+                    //CurrentTicketList.Remove(ticket);
+                    MessageBox.Show("Ticket echoué avec succès(?)", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur lors de l'echec : {ex}", "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
+
+        private bool CanExecuteFinishingTicketCommand(object obj)
+        {
+            var ticket = obj as Ticket;
+            return ticket.StatusIdTicket == 1 || ticket.StatusIdTicket == 2;
         }
     }
 }

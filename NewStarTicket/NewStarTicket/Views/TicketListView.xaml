@@ -80,7 +80,7 @@
                             <StackPanel>
                                 <Button Content="Je prends !" 
                                     Background="LightBlue" 
-                                    Command="{Binding DataContext.UpdateCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
+                                    Command="{Binding DataContext.TakeTicketCommand, RelativeSource={RelativeSource AncestorType=DataGrid}}" 
                                     CommandParameter="{Binding}" 
                                     Width="100" 
                                     Margin="0,2"/>

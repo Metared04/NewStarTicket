@@ -21,7 +21,33 @@ namespace NewStarTicket.Repositories
         {
             throw new NotImplementedException();
         }
-
+        public void EditStatus(Ticket ticket, int newStatusId)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "UPDATE [TicketTable] Set StatusIdTicket = @status Where IdTicket = @id";
+                //, ticket_resolved_date = @date
+                command.Parameters.Add("@status", SqlDbType.UniqueIdentifier).Value = newStatusId;
+                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
+        }
+        public void TakingTicket(Ticket ticket, Guid IdUser)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "UPDATE [TicketTable] Set UserResolvedIdTicket = @uid, StatusIdTicket = 2 Where IdTicket = @id";
+                command.Parameters.Add("@uid", SqlDbType.UniqueIdentifier).Value = IdUser;
+                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
+        }
         public IEnumerable<Ticket> GetAll()
         {
             List<Ticket> ticketsList = new List<Ticket>();
@@ -190,7 +216,7 @@ namespace NewStarTicket.Repositories
                 connection.Open();
                 command.Connection = connection;
                 command.CommandText = "Delete from [TicketTable] Where IdTicket = @id";
-                command.Parameters.Add("@Id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
+                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }

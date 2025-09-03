@@ -10,6 +10,8 @@ namespace NewStarTicket.Models
     {
         void Add(Ticket ticket);
         void Edit(Ticket ticket);
+        void EditStatus(Ticket ticket, int newStatusId);
+        void TakingTicket(Ticket ticket, Guid IdUser);
         void Remove(Ticket ticket);
         Ticket GetTicketById(Guid IdTicket);
         Ticket GetTicketByTitleTicket(string TitleTicket);
