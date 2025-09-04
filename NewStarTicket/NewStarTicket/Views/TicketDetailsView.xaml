@@ -22,21 +22,36 @@
         <TextBlock Text="{Binding TitleTicket}" 
                    FontSize="18" 
                    FontWeight="Bold"
+                   Foreground="Ivory"
                    Margin="0,0,0,10"
                    VerticalAlignment="Center"/>
         
         <StackPanel Grid.Row="1" 
                     Orientation="Vertical">
-            <TextBlock Text="{Binding IdTicket, StringFormat=ID : {0}}" />
-            <TextBlock Text="{Binding DescriptionTicket, StringFormat=Description : {0}}" />
-            <TextBlock Text="{Binding LocationIdTicket, StringFormat=Lieu : {0}}" />
-            <TextBlock Text="{Binding EquipmentIdTicket, StringFormat=Équipement : {0}}" />
-            <TextBlock Text="{Binding EmergencyLevelIdTicket, StringFormat=Urgence : {0}}" />
-            <TextBlock Text="{Binding StatusIdTicket, StringFormat=Statut : {0}}" />
-            <TextBlock Text="{Binding BroadcastDateTicket, StringFormat=Créé le : {0:yyyy/MM/dd HH:mm}}" />
-            <TextBlock Text="{Binding ResolvedDateTicket, StringFormat=Résolu le : {0:yyyy/MM/dd HH:mm}}" />
-            <TextBlock Text="{Binding UserBroadcastedName, StringFormat=Émetteur : {0}}" />
-            <TextBlock Text="{Binding UserResolvedName, StringFormat=Résolveur : {0}}" />
+            <TextBlock Text="{Binding IdTicket, StringFormat=ID : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding DescriptionTicket, StringFormat=Description : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding LocationIdTicket, StringFormat=Lieu : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding EquipmentIdTicket, StringFormat=Équipement : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding EmergencyLevelIdTicket, StringFormat=Urgence : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding StatusIdTicket, StringFormat=Statut : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding BroadcastDateTicket, StringFormat=Créé le : {0:yyyy/MM/dd HH:mm}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding ResolvedDateTicket, StringFormat=Résolu le : {0:yyyy/MM/dd HH:mm}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding UserBroadcastedName, StringFormat=Émetteur : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding UserBroadcastedIdTicket, StringFormat=Id Emetteur : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding UserResolvedName, StringFormat=Résolveur : {0}}" 
+                       Foreground="Ivory"/>
+            <TextBlock Text="{Binding UserResolvedIdTicket, StringFormat=Id Resolveur : {0}}" 
+           Foreground="Ivory"/>
         </StackPanel>
 
         <StackPanel Grid.Row="2" 
@@ -45,8 +60,8 @@
             <Button Content="Profil émetteur" 
                     Command="{Binding ViewEmitterProfileCommand}" 
                     Width="120"/>
-            <Button Content="Profil résolveur" 
-                    Command="{Binding ViewResolverProfileCommand}" 
+            <Button Content="Contact le résolveur" 
+                    Command="{Binding SendEmailToResolverCommand}" 
                     Width="120"/>
             <Button Content="Exporter en PDF" 
                     Command="{Binding ExportToPdfCommand}" 

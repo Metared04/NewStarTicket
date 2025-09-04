@@ -1,4 +1,8 @@
-﻿using NewStarTicket.Models;
+﻿using QuestPDF.Fluent;
+using QuestPDF.Helpers;
+using QuestPDF.Infrastructure;
+using Microsoft.Win32;
+using NewStarTicket.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -57,6 +61,8 @@ namespace NewStarTicket.ViewModels
         public DateTime? ResolvedDateTicket => Ticket?.ResolvedDateTicket;
         public string UserBroadcastedName => Ticket?.UserBroadcastedTicketName ?? "Inconnu";
         public string UserResolvedName => Ticket?.UserResovelvedTicketName ?? "Personne.";
+        public Guid UserBroadcastedIdTicket => Ticket?.UserBroadcastedIdTicket ?? Guid.Empty;
+        public Guid UserResolvedIdTicket => Ticket?.UserResolvedIdTicket ?? Guid.Empty;
         public Ticket CurrentTicket 
         {
             get 
@@ -69,11 +75,12 @@ namespace NewStarTicket.ViewModels
                 OnPropertyChanged(nameof(CurrentTicket));
             }
         }
+        public bool HasResolver => Ticket.UserResolvedIdTicket != null;
 
         // Commandes
         public ICommand CloseCommand { get; }
         public ICommand ViewEmitterProfileCommand { get; }
-        public ICommand ViewResolverProfileCommand { get; }
+        public ICommand SendEmailToResolverCommand { get; }
         public ICommand ExportToPdfCommand { get; }
 
         public TicketDetailsViewModel(Ticket ticket) 
@@ -81,7 +88,7 @@ namespace NewStarTicket.ViewModels
             // Commandes
             CloseCommand = new ViewModelCommand(ExecuteCloseCommand);
             ViewEmitterProfileCommand = new ViewModelCommand(ExecuteViewEmitterProfileCommand);
-            ViewResolverProfileCommand = new ViewModelCommand(ExecuteViewResolverProfileCommand);
+            SendEmailToResolverCommand = new ViewModelCommand(ExecuteSendEmailToResolverCommand);
             ExportToPdfCommand = new ViewModelCommand(ExecuteExportToPdfCommand);
 
             // Chargement du ticket
@@ -109,13 +116,104 @@ namespace NewStarTicket.ViewModels
             MessageBox.Show("Profile.");
             //MessageBox.Show($"(Non implémenté) Voir profil de : {EmitterName}", "Profil émetteur", MessageBoxButton.OK, MessageBoxImage.Information);
         }
-        private void ExecuteViewResolverProfileCommand(object obj)
+        private void ExecuteSendEmailToResolverCommand(object obj)
         {
-            MessageBox.Show("Profile 2.");
+            if (!HasResolver)
+            {
+                MessageBox.Show("Aucun résolveur assigné à ce ticket.", "Information",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            } /*else
+            {
+                var result = MessageBox.Show(
+        "Comment souhaitez-vous envoyer l'email ?\n\nOui = Client mail par défaut\nNon = Gmail (navigateur)\nAnnuler = Copier dans le presse-papiers",
+        "Choix du client mail",
+        MessageBoxButton.YesNoCancel,
+        MessageBoxImage.Question);
+                try
+                {
+                    string subject = $"Ticket #{Ticket.IdTicket} - {Ticket.TitleTicket}";
+                    string body = $"Bonjour {UserResolvedName},\n\n" +
+                         $"Je vous contacte concernant le ticket suivant :\n\n" +
+                         $"ID: {Ticket.IdTicket}\n" +
+                         $"Titre: {Ticket.TitleTicket}\n" +
+                         $"Description: {Ticket.DescriptionTicket}\n" +
+                         $"Lieu: {Ticket.LocationIdTicket}\n" +
+                         $"Équipement: {Ticket.EquipmentIdTicket}\n" +
+                         $"Créé le: {BroadcastDateTicket:yyyy/MM/dd HH:mm}\n\n" +
+                         $"Cordialement,\n{UserBroadcastedName}";
+                    switch (result)
+                    {
+                        case MessageBoxResult.Yes: // Client par défaut
+                            string mailto = $"mailto:?subject={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(body)}";
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                            {
+                                FileName = mailto,
+                                UseShellExecute = true
+                            });
+                            break;
+
+                        case MessageBoxResult.No: // Gmail via navigateur
+                            string gmailUrl = $"https://mail.google.com/mail/?view=cm&fs=1&tf=1&su={Uri.EscapeDataString(subject)}&body={Uri.EscapeDataString(body)}";
+                            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                            {
+                                FileName = gmailUrl,
+                                UseShellExecute = true
+                            });
+                            break;
+
+                        case MessageBoxResult.Cancel: // Copier dans le presse-papiers
+                            string emailContent = $"Sujet: {subject}\n\n{body}";
+                            Clipboard.SetText(emailContent);
+                            MessageBox.Show("Contenu de l'email copié dans le presse-papiers.", "Information", MessageBoxButton.OK, MessageBoxImage.Information);
+                            break;
+                    }
+                } catch (Exception ex)
+                {
+                    MessageBox.Show($"Erreur lors de l'ouverture du client mail : {ex.Message}",
+                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }*/
         }
         private void ExecuteExportToPdfCommand(object obj)
         {
-            MessageBox.Show("Export pdf");
+            try
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "PDF files (*.pdf)|*.pdf",
+                    Title = "Enregistrer le ticket en PDF",
+                    FileName = $"Ticket_{Ticket.IdTicket}_{DateTime.Now:yyyyMMdd_HHmmss}.pdf"
+                };
+                if (saveFileDialog.ShowDialog() != true) return;
+                QuestPDF.Settings.License = LicenseType.Community;
+
+                Document.Create(container =>
+                {
+                    container.Page(page =>
+                    {
+                        page.Size(PageSizes.A4);
+                        page.Margin(2, Unit.Centimetre);
+
+                        page.Content()
+                            .PaddingVertical(1, Unit.Centimetre)
+                            .Column(x =>
+                            {
+                                x.Item().Text("TEST PDF").FontSize(20).Bold();
+                                x.Item().Text($"ID: {Ticket?.IdTicket}").FontSize(12);
+                                x.Item().Text($"Titre: {Ticket?.TitleTicket}").FontSize(12);
+                                x.Item().Text($"Description: {Ticket?.DescriptionTicket}").FontSize(12);
+                            });
+                    });
+                }).GeneratePdf(saveFileDialog.FileName);
+
+                MessageBox.Show("PDF créé avec succès !", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+
+            } catch (Exception ex)
+            {
+                MessageBox.Show($"Erreur lors de l'exportation du pdf : {ex.Message}",
+                "Erreur", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }

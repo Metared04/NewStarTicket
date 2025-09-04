@@ -43,7 +43,7 @@ namespace NewStarTicket.ViewModels
             {
                 _isCurrentUserAdmin = value;
                 OnPropertyChanged(nameof(IsCurrentUserAdmin));
-                OnPropertyChanged(nameof(AdminColumnVisibility));
+                //OnPropertyChanged(nameof(AdminColumnVisibility));
             } 
         }
 
@@ -75,6 +75,7 @@ namespace NewStarTicket.ViewModels
         }
 
         public Visibility AdminColumnVisibility => IsCurrentUserAdmin ? Visibility.Visible : Visibility.Collapsed;
+        public string FinishedTicketButtonText => IsCurrentUserAdmin ? "Terminer !" : "Annuler.";
 
         // Commandes
         public ICommand ShowTicketInfosCommand { get; }
