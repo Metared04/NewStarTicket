@@ -52,7 +52,8 @@
                    FontFamily="Palatino Linotype" 
                    FontSize="20" 
                    FontWeight="Bold" 
-                   Padding="35,0,0,0"/>
+                   Padding="35,0,0,0"
+                   Margin="20, 0, 20, 0"/>
         <TextBox Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}" 
                  Grid.Row="2" 
                  Margin="0,5,0,10"/>
@@ -64,7 +65,8 @@
                    FontFamily="Palatino Linotype" 
                    FontSize="20" 
                    FontWeight="Bold" 
-                   Padding="35,0,0,0"/>
+                   Padding="35,0,0,0"
+                   Margin="20, 0, 20, 0"/>
         <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                             Grid.Row="4"
                                             Margin="0,5,0,10"/>

@@ -67,22 +67,33 @@
                     Grid.ColumnSpan="2"
                     Orientation="Horizontal"
                     Background="{StaticResource color2}">
-            <RadioButton Style="{StaticResource menuButton}" 
-                         Tag="{StaticResource whiteColor}"
-                         Command="{Binding ShowDashboardCommand}"
-                         IsChecked="True">
-                <TextBlock Text="Tabeau de bord" Style="{StaticResource menuButtonText}"/>
-            </RadioButton>
-            <RadioButton Style="{StaticResource menuButton}" 
-                         Tag="{StaticResource whiteColor}"
-                         Command="{Binding ShowTicketListCommand}">
-                <TextBlock Text="Ticket" Style="{StaticResource menuButtonText}"/>
-            </RadioButton>
-            <RadioButton Style="{StaticResource menuButton}" 
-                         Tag="{StaticResource whiteColor}"
-                         Command="{Binding ShowStatisticCommand}">
-                <TextBlock Text="Statistiques" Style="{StaticResource menuButtonText}"/>
-            </RadioButton>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+            
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowDashboardCommand}"
+                             IsChecked="True"
+                             Grid.Column="0">
+                    <TextBlock Text="Tabeau de bord" Style="{StaticResource menuButtonText}"/>
+                </RadioButton>
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowTicketListCommand}"
+                             Grid.Column="1">
+                    <TextBlock Text="Ticket" Style="{StaticResource menuButtonText}"/>
+                </RadioButton>
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowStatisticCommand}"
+                             Grid.Column="2">
+                    <TextBlock Text="Statistiques" Style="{StaticResource menuButtonText}"/>
+                </RadioButton>
+            </Grid>
         </StackPanel>
         
         <!-- Partie contenu principal, avec la vue enfant -->

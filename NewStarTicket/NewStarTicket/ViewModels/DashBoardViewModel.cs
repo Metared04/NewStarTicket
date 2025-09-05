@@ -1,12 +1,16 @@
 ﻿using NewStarTicket.Models;
 using NewStarTicket.Repositories;
+using NewStarTicket.Views;
+using OxyPlot;
+using OxyPlot.Series;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using OxyPlot;
-using OxyPlot.Series;
+using System.Windows;
+using System.Windows.Input;
 
 namespace NewStarTicket.ViewModels
 {
@@ -25,7 +29,17 @@ namespace NewStarTicket.ViewModels
         private Guid _currentUserId;
         private PlotModel _pieModel;
 
+        private ViewModelBase _createNewTicketView;
+        private ViewModelBase _createNewUserView;
+
         private ITicketRepository ticketRepository;
+
+        // Commandes
+        public ICommand ShowAddTicketScreenCommand { get; }
+        public ICommand ShowAddUserScreenCommand { get; }
+        public ICommand ShowRightManagementScreenCommand { get; }
+
+        // Proprietes
         public int ResolvedTicketNumber 
         {
             get
@@ -143,9 +157,39 @@ namespace NewStarTicket.ViewModels
                 OnPropertyChanged(nameof(PieModel));
             }
         }
+        public ViewModelBase CreateNewTicketView
+        {
+            get
+            {
+                return _createNewTicketView;
+            }
+            set
+            {
+                _createNewTicketView = value;
+                OnPropertyChanged(nameof(CreateNewTicketView));
+            }
+        }
+        public ViewModelBase CreateNewUserView
+        {
+            get
+            {
+                return _createNewUserView;
+            }
+            set
+            {
+                _createNewUserView = value;
+                OnPropertyChanged(nameof(CreateNewUserView));
+            }
+        }
 
         public DashBoardViewModel(UserAccountModel currentUserAccount)
         {
+            // Initialisation commandes
+            ShowAddTicketScreenCommand = new ViewModelCommand(ExecuteShowAddTicketScreenCommand);
+            ShowAddUserScreenCommand = new ViewModelCommand(ExecuteShowAddUserScreenCommand);
+            ShowRightManagementScreenCommand = new ViewModelCommand(ExecuteShowRightManagementScreenCommand);
+
+            // Chargement donnees
             LoadDashboardData(currentUserAccount);
         }
         private void LoadDashboardData(UserAccountModel currentUser)
@@ -241,6 +285,38 @@ namespace NewStarTicket.ViewModels
                 5 => "Echoué",
                 _ => "Inconnu"
             };
+        }
+
+        private void ExecuteShowAddTicketScreenCommand(object obj)
+        {
+            CreateNewTicketView = new AddTicketViewModel();
+            var window = new AddTicketView
+            {
+                DataContext = CreateNewTicketView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+        }
+        private void ExecuteShowAddUserScreenCommand(object obj)
+        {
+            if (IsCurrentUserAdmin)
+            {
+                CreateNewUserView = new AddUserViewModel();
+                var window = new AddUserView
+                {
+                    DataContext = CreateNewUserView,
+                    Owner = Application.Current.MainWindow
+                };
+                window.ShowDialog();
+            } 
+            else
+            {
+                MessageBox.Show($"Droit insuffisant !", "Créer un utilisateur", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+            }
+        }
+        private void ExecuteShowRightManagementScreenCommand(object obj)
+        {
+            MessageBox.Show($"Pas encore implementer !", "Gerer les droits", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

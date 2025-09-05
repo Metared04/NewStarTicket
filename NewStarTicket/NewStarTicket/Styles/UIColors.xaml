@@ -17,7 +17,8 @@
 
     <SolidColorBrush x:Key="whiteColor" Color="White"/>
     <SolidColorBrush x:Key="errorMessage" Color="Red"/>
-    
+    <SolidColorBrush x:Key="textBlockColor" Color="#F7BA0A"/>
+
     <!-- Couleurs cartes -->
 
     <SolidColorBrush x:Key="redCardColor" Color="#DA0506"/>
