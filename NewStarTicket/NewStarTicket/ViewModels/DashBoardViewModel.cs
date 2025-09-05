@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OxyPlot;
+using OxyPlot.Series;
 
 namespace NewStarTicket.ViewModels
 {
@@ -21,6 +23,7 @@ namespace NewStarTicket.ViewModels
         private string _cardTitle3;
         private bool _isCurrentUserAdmin;
         private Guid _currentUserId;
+        private PlotModel _pieModel;
 
         private ITicketRepository ticketRepository;
         public int ResolvedTicketNumber 
@@ -131,6 +134,15 @@ namespace NewStarTicket.ViewModels
                 OnPropertyChanged(nameof(CurrentUserId));
             }
         }
+        public PlotModel PieModel
+        {
+            get => _pieModel;
+            set
+            {
+                _pieModel = value;
+                OnPropertyChanged(nameof(PieModel));
+            }
+        }
 
         public DashBoardViewModel(UserAccountModel currentUserAccount)
         {
@@ -156,7 +168,8 @@ namespace NewStarTicket.ViewModels
             }
             else
             {
-                CardTitle1 = $"Vous etes pas admin {IsCurrentUserAdmin}";
+                ResolvedTicketNumber = ticketRepository.GetEmittedTicketCountByUser(CurrentUserId);
+                CardTitle1 = $"Tickets émit";
             }
 
         }
@@ -165,29 +178,69 @@ namespace NewStarTicket.ViewModels
             if (IsCurrentUserAdmin)
             {
                 WaitingTicketCount = ticketRepository.GetTicketsWaitingCount();
-                CardTitle2 = $"Ticket(s) en attente";
             }
             else
             {
-                CardTitle2 = $"Vous etes pas admin {IsCurrentUserAdmin}";
+                WaitingTicketCount = ticketRepository.GetEmittedTicketCountWaiting(CurrentUserId);
             }
+            CardTitle2 = $"Ticket(s) en attente";
         }
         private void GetCreatedTicketToday()
         {
             if (IsCurrentUserAdmin)
             {
                 CreatedTicketToday = ticketRepository.GetTicketsCreatedToday();
-                CardTitle3 = $"Ticket(s) créer aujourd'hui";
             }
             else
             {
-                CardTitle3 = $"Vous etes pas admin {IsCurrentUserAdmin}";
+                CreatedTicketToday = ticketRepository.GetTicketsCreatedTodayByUser(CurrentUserId);
             }
-            
+            CardTitle3 = $"Ticket(s) créer aujourd'hui";
         }
         private void GetTicketsCountedByStatus()
         {
-            TicketsCountedByStatus = ticketRepository.GetTicketsByStatus();
+            if (IsCurrentUserAdmin)
+            {
+                TicketsCountedByStatus = ticketRepository.GetTicketsByStatus();
+            }
+            else
+            {
+                TicketsCountedByStatus = ticketRepository.GetUsersTicketsByStatus(CurrentUserId);
+            }
+            LoadPieChart();
+        }
+        private void LoadPieChart()
+        {
+            var model = new PlotModel();
+
+            var pieSeries = new PieSeries
+            {
+                StrokeThickness = 0.25,
+                InsideLabelPosition = 0.8,
+                AngleSpan = 360,
+                StartAngle = 0
+            };
+
+            foreach (var kvp in TicketsCountedByStatus)
+            {
+                string label = GetStatusLabel(kvp.Key);
+                pieSeries.Slices.Add(new PieSlice(label, kvp.Value));
+            }
+
+            model.Series.Add(pieSeries);
+            PieModel = model;
+        }
+        private string GetStatusLabel(int statusId)
+        {
+            return statusId switch
+            {
+                1 => "En attente",
+                2 => "En cours",
+                3 => "Annulé",
+                4 => "Achevé",
+                5 => "Echoué",
+                _ => "Inconnu"
+            };
         }
     }
 }

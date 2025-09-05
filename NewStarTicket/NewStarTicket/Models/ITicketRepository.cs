@@ -20,6 +20,10 @@ namespace NewStarTicket.Models
         int GetTicketsWaitingCount();
         int GetTicketsCreatedToday();
         Dictionary<int, int> GetTicketsByStatus();
+        int GetEmittedTicketCountByUser(Guid IdUser);
+        int GetEmittedTicketCountWaiting(Guid IdUser);
+        int GetTicketsCreatedTodayByUser(Guid IdUser);
+        Dictionary<int, int> GetUsersTicketsByStatus(Guid IdUser);
         IEnumerable<Ticket> GetAll();
         IEnumerable<Ticket> GetAllByUserId(Guid userId);
         IEnumerable<Ticket> GetTicketsByEmergencyLevel(int emergencyLevelId);

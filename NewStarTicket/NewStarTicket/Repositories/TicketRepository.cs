@@ -259,5 +259,85 @@ namespace NewStarTicket.Repositories
             }
             return result;
         }
+        public int GetEmittedTicketCountByUser(Guid IdUser)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select count(*) from TicketTable " +
+                    "where UserBroadcastedIdTicket = @userId";
+                command.Parameters.Add("@userId", SqlDbType.UniqueIdentifier).Value = IdUser;
+                var result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : 0;
+            }
+        }
+        public int GetEmittedTicketCountWaiting(Guid IdUser)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select count(*) from TicketTable " +
+                    "where UserBroadcastedIdTicket = @userId and " +
+                    " (statusIdTicket = 1 or statusIdTicket = 2)";
+                command.Parameters.Add("@userId", SqlDbType.UniqueIdentifier).Value = IdUser;
+                var result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : 0;
+            }
+        }
+        public int GetTicketsCreatedTodayByUser(Guid IdUser)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select count(*) " +
+                    "from TicketTable " +
+                    "WHERE (BroadcastDateTicket >= @startOfDay AND " +
+                    "BroadcastDateTicket < @startOfNextDay) AND " +
+                    "UserBroadcastedIdTicket = @userId";
+
+                var today = DateTime.Today;
+                var tomorrow = today.AddDays(1);
+
+                command.Parameters.Add("@startOfDay", SqlDbType.DateTime).Value = today;
+                command.Parameters.Add("@startOfNextDay", SqlDbType.DateTime).Value = tomorrow;
+                command.Parameters.Add("@userId", SqlDbType.UniqueIdentifier).Value = IdUser;
+
+                var result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : 0;
+            }
+        }
+        public Dictionary<int, int> GetUsersTicketsByStatus(Guid IdUser)
+        {
+            var result = new Dictionary<int, int>();
+
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT StatusIdTicket, COUNT(*) AS Count " +
+                    "FROM TicketTable " +
+                    "Where UserBroadcastedIdTicket = @userId " +
+                    "GROUP BY StatusIdTicket";
+
+                command.Parameters.Add("@userId", SqlDbType.UniqueIdentifier).Value = IdUser;
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int statusId = reader.GetInt32(0);
+                        int count = reader.GetInt32(1);
+                        result[statusId] = count;
+                    }
+                }
+            }
+            return result;
+        }
     }
 }
