@@ -60,7 +60,9 @@
                    Grid.Row="5"
                    Grid.Column="1"/>
         <ComboBox ItemsSource="{Binding EmergencyLevels}"
-                  SelectedItem="{Binding SelectedEmergencyLevels}"
+                  SelectedValue="{Binding SelectedEmergencyLevelId}"
+                  SelectedValuePath="IdEmergencyLevel"
+                  DisplayMemberPath="NameEmergencyLevel"
                   Grid.Row="6"
                   Grid.Column="1"/>
         <TextBlock Text="Lieu :"
@@ -68,15 +70,19 @@
                    Grid.Row="7"
                    Grid.Column="1"/>
         <ComboBox ItemsSource="{Binding Locations}"
-                  SelectedItem="{Binding SelectedLocation}"
+                  SelectedValue="{Binding SelectedLocationId}"
+                  SelectedValuePath="IdLocation"
+                  DisplayMemberPath="NameLocation"
                   Grid.Row="8"
                   Grid.Column="1"/>
         <TextBlock Text="Matériel :"
                    Foreground="{StaticResource textBlockColor}"
                    Grid.Row="9"
                    Grid.Column="1"/>
-        <ComboBox ItemsSource="{Binding Locations}"
-                  SelectedItem="{Binding SelectedLocation}"
+        <ComboBox ItemsSource="{Binding Equipments}"
+                  SelectedValue="{Binding SelectedEquipmentId}"
+                  SelectedValuePath="IdEquipment"
+                  DisplayMemberPath="NameEquipment"
                   Grid.Row="10"
                   Grid.Column="1"/>
 

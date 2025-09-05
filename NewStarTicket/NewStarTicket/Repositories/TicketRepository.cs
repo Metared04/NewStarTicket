@@ -14,7 +14,29 @@ namespace NewStarTicket.Repositories
     {
         public void Add(Ticket ticket)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = @"Insert into [TicketTable] " +
+                    "(TitleTicket, DescriptionTicket, BroadcastDateTicket, " +
+                    "StatusIdTicket, EmergencyLevelIdTicket, EquipmentIdTicket, " +
+                    "LocationIdTicket, UserBroadcastedIdTicket) " +
+                    "values (@title, @description, @broadcastDate, " +
+                    "@statusId, @emergencyLevelId, @equipmentId, " +
+                    "@locationId, @userId)";
+                command.Parameters.AddWithValue("@title", ticket.TitleTicket);
+                command.Parameters.AddWithValue("@description", (object?)ticket.DescriptionTicket ?? DBNull.Value);
+                command.Parameters.AddWithValue("@broadcastDate", ticket.BroadcastDateTicket.ToString("yyyy/MM/dd HH:mm:ss"));
+                command.Parameters.AddWithValue("@statusId", 1);
+                command.Parameters.AddWithValue("@emergencyLevelId", ticket.EmergencyLevelIdTicket);
+                command.Parameters.AddWithValue("@equipmentId", ticket.EquipmentIdTicket);
+                command.Parameters.AddWithValue("@locationId", ticket.LocationIdTicket);
+                command.Parameters.AddWithValue("@userId", ticket.UserBroadcastedIdTicket);
+
+                command.ExecuteNonQuery();
+            }
         }
 
         public void Edit(Ticket ticket)

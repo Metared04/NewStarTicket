@@ -195,6 +195,7 @@ namespace NewStarTicket.ViewModels
         private void LoadDashboardData(UserAccountModel currentUser)
         {
             ticketRepository = new TicketRepository();
+
             IsCurrentUserAdmin = currentUser.IsAdmin;
             CurrentUserId = currentUser.Id;
 
@@ -289,7 +290,7 @@ namespace NewStarTicket.ViewModels
 
         private void ExecuteShowAddTicketScreenCommand(object obj)
         {
-            CreateNewTicketView = new AddTicketViewModel();
+            CreateNewTicketView = new AddTicketViewModel(CurrentUserId);
             var window = new AddTicketView
             {
                 DataContext = CreateNewTicketView,
