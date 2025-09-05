@@ -13,11 +13,16 @@
     <SolidColorBrush x:Key="nuanceBleuClair" Color="#3A4A5C"/>
     <SolidColorBrush x:Key="nuanceBleuFonce" Color="#0F1A26"/>
 
-    <!-- Font Colors -->
+    <!-- Couleurs polices -->
 
     <SolidColorBrush x:Key="whiteColor" Color="White"/>
     <SolidColorBrush x:Key="errorMessage" Color="Red"/>
     
-    <!--  -->
-    
+    <!-- Couleurs cartes -->
+
+    <SolidColorBrush x:Key="redCardColor" Color="#DA0506"/>
+    <SolidColorBrush x:Key="darkBlueCardColor" Color="#1D375C"/>
+    <SolidColorBrush x:Key="whiteCardColor" Color="#EBEBE9"/>
+    <SolidColorBrush x:Key="yellowCardColor" Color="#F4FA41"/>
+
 </ResourceDictionary>

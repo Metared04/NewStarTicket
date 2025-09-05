@@ -145,42 +145,6 @@ namespace NewStarTicket.Repositories
             return ticketsList;
         }
 
-        public Ticket GetTicketById(int IdTicket)
-        {
-            /*
-            using (var connection = GetConnection())
-            using (var command = new SqlCommand())
-            {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "Select * from [TicketTable] WHERE IdTicket = @IdTicket";
-                command.Parameters.Add("@IdTicket", SqlDbType.UniqueIdentifier).Value = IdTicket;
-                using (var reader = command.ExecuteReader())
-                {
-                    if (reader.Read())
-                    {
-                        return new Ticket
-                        {
-                            IdTicket = (Guid)reader["IdTicket"],
-                            TitleTicket = reader["TitleTicket"].ToString(),
-                            DescriptionTicket = reader["DescriptionTicket"]?.ToString(),
-                            BroadcastDateTicket = (DateTime)reader["BroadcastDateTicket"],
-                            ResolvedDateTicket = reader["ResolvedDateTicket"] as DateTime?,
-                            StatusIdTicket = (int)reader["StatusIdTicket"],
-                            EmergencyLevelIdTicket = (int)reader["EmergencyLevelIdTicket"],
-                            EquipmentIdTicket = (int)reader["EquipmentIdTicket"],
-                            LocationIdTicket = (int)reader["LocationIdTicket"],
-                            UserBroadcastedIdTicket = (Guid)reader["UserBroadcastedIdTicket"],
-                            UserResolvedIdTicket = reader["UserResolvedIdTicket"] as Guid?
-                        };
-                    }
-                }
-            }
-
-            return null;*/
-            throw new NotImplementedException();
-        }
-
         public Ticket GetTicketById(Guid IdTicket)
         {
             throw new NotImplementedException();
@@ -205,11 +169,6 @@ namespace NewStarTicket.Repositories
         {
             throw new NotImplementedException();
         }
-
-        public IEnumerable<Ticket> GetTicketsByStatus(int statusId)
-        {
-            throw new NotImplementedException();
-        }
         public void Remove(Ticket ticket)
         {
             using (var connection = GetConnection())
@@ -221,6 +180,84 @@ namespace NewStarTicket.Repositories
                 command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
                 int rowsAffected = command.ExecuteNonQuery();
             }
+        }
+
+        public int GetTicketCountResolvedByAdmin(Guid IdUser)
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open(); 
+                command.Connection = connection;
+                command.CommandText = "select count(*) from TicketTable " +
+                    "where UserResolvedIdTicket = @adminId and " +
+                    "statusIdTicket = 4";
+                command.Parameters.Add("@adminId", SqlDbType.UniqueIdentifier).Value = IdUser;
+                var result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : 0;
+            }
+        }
+
+        public int GetTicketsWaitingCount()
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "select count(*) " +
+                    "from TicketTable " +
+                    "where statusIdTicket = 1";
+                var result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : 0;
+            }
+        }
+
+        public int GetTicketsCreatedToday()
+        {
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open(); 
+                command.Connection = connection;
+                command.CommandText = "select count(*) " +
+                    "from TicketTable " +
+                    "WHERE BroadcastDateTicket >= @startOfDay " +
+                    "AND BroadcastDateTicket < @startOfNextDay";
+
+                var today = DateTime.Today;
+                var tomorrow = today.AddDays(1);
+
+                command.Parameters.Add("@startOfDay", SqlDbType.DateTime).Value = today;
+                command.Parameters.Add("@startOfNextDay", SqlDbType.DateTime).Value = tomorrow;
+
+                var result = command.ExecuteScalar();
+                return (result != null) ? Convert.ToInt32(result) : 0;
+            }
+        }
+        public Dictionary<int, int> GetTicketsByStatus()
+        {
+            var result = new Dictionary<int, int>();
+
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT StatusIdTicket, COUNT(*) AS Count " +
+                    "FROM TicketTable " +
+                    "GROUP BY StatusIdTicket";
+                using(var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int statusId = reader.GetInt32(0);
+                        int count = reader.GetInt32(1);
+                        result[statusId] = count;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

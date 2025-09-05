@@ -16,9 +16,12 @@ namespace NewStarTicket.Models
         Ticket GetTicketById(Guid IdTicket);
         Ticket GetTicketByTitleTicket(string TitleTicket);
         Ticket GetTicketByUserIdBroadcastedTicket(Guid IdUser);
+        int GetTicketCountResolvedByAdmin(Guid IdUser);
+        int GetTicketsWaitingCount();
+        int GetTicketsCreatedToday();
+        Dictionary<int, int> GetTicketsByStatus();
         IEnumerable<Ticket> GetAll();
         IEnumerable<Ticket> GetAllByUserId(Guid userId);
-        IEnumerable<Ticket> GetTicketsByStatus(int statusId);
         IEnumerable<Ticket> GetTicketsByEmergencyLevel(int emergencyLevelId);
         IEnumerable<Ticket> GetTicketsByLocation(int locationId);
     }

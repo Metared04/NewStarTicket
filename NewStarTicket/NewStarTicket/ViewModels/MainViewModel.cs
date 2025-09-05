@@ -75,6 +75,8 @@ namespace NewStarTicket.ViewModels
             userRepository = new UserRepository();
             CurrentUserAccount = new UserAccountModel();
 
+            LoadCurrentUserData();
+
             // Initialisation des commandes
 
             ShowTicketListCommand = new ViewModelCommand(ExecuteShowTicketListCommand);
@@ -85,7 +87,7 @@ namespace NewStarTicket.ViewModels
 
             ExecuteShowDashboardCommand(null);
 
-            LoadCurrentUserData();
+            
         }
 
         private void ExecuteShowStatisticCommand(object obj)
@@ -96,7 +98,7 @@ namespace NewStarTicket.ViewModels
 
         private void ExecuteShowDashboardCommand(object obj)
         {
-            CurrentChildView = new DashBoardViewModel();
+            CurrentChildView = new DashBoardViewModel(CurrentUserAccount);
             Caption = "Dashboard";
         }
 

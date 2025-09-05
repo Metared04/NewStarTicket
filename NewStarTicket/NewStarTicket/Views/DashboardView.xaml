@@ -6,7 +6,143 @@
              xmlns:local="clr-namespace:NewStarTicket.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    
     <Grid>
-        <TextBlock Text="Dashboard" Foreground="LightBlue"/>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.Background>
+            <SolidColorBrush Color="DarkGray"/>
+        </Grid.Background>
+        
+        <TextBlock Grid.Column="1" Text="Dashboard" Foreground="LightBlue"/>
+        <Border CornerRadius="12"
+                Background="{StaticResource redCardColor}"
+                Margin="10"
+                Width="200" 
+                Height="120"
+                Grid.Row="0"
+                Grid.Column="0">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" 
+                     ShadowDepth="3" 
+                     Color="#40000000" 
+                     Opacity="0.3"/>
+            </Border.Effect>
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top">
+                    <TextBlock Text="{Binding CardTitle1}"
+                               FontSize="10"
+                               FontWeight="Medium"
+                               Foreground="White" 
+                               Opacity="0.9"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1"
+                           Text="{Binding ResolvedTicketNumber}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="White"
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Center"/>
+            </Grid>
+            
+        </Border>
+        
+        <Border CornerRadius="12"
+                Background="{StaticResource darkBlueCardColor}"
+                Margin="10"
+                Width="200" 
+                Height="120"
+                Grid.Row="0"
+                Grid.Column="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" 
+             ShadowDepth="3" 
+             Color="#40000000" 
+             Opacity="0.3"/>
+            </Border.Effect>
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                    Orientation="Horizontal"
+                    VerticalAlignment="Top">
+                    <TextBlock Text="{Binding CardTitle2}"
+                       FontSize="10"
+                       FontWeight="Medium"
+                       Foreground="White" 
+                       Opacity="0.9"
+                       VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1"
+                   Text="{Binding WaitingTicketCount}"
+                   FontSize="20"
+                   FontWeight="Bold"
+                   Foreground="White"
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Center"/>
+            </Grid>
+
+        </Border>
+        
+        <Border CornerRadius="12"
+                Background="{StaticResource yellowCardColor}"
+                Margin="10"
+                Width="200" 
+                Height="120"
+                Grid.Row="0"
+                Grid.Column="2">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" 
+                                  ShadowDepth="3" 
+                                  Color="#40000000" 
+                                  Opacity="0.3"/>
+            </Border.Effect>
+            <Grid Margin="16">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Row="0"
+                            Orientation="Horizontal"
+                            VerticalAlignment="Top">
+                    <TextBlock Text="{Binding CardTitle3}"
+                               FontSize="10"
+                               FontWeight="Medium"
+                               Foreground="Black"
+                               Opacity="0.9"
+                               VerticalAlignment="Center"/>
+                </StackPanel>
+                <TextBlock Grid.Row="1"
+                           Text="{Binding CreatedTicketToday}"
+                           FontSize="20"
+                           FontWeight="Bold"
+                           Foreground="Black"
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Center"/>
+            </Grid>
+
+        </Border>
     </Grid>
 </UserControl>
