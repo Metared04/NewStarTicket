@@ -57,7 +57,7 @@
                 </StackPanel>
                 <TextBlock Grid.Row="1"
                            Text="{Binding ResolvedTicketNumber}"
-                           FontSize="20"
+                           FontSize="40"
                            FontWeight="Bold"
                            Foreground="White"
                            VerticalAlignment="Center" 
@@ -96,7 +96,7 @@
                 </StackPanel>
                 <TextBlock Grid.Row="1"
                    Text="{Binding WaitingTicketCount}"
-                   FontSize="20"
+                   FontSize="40"
                    FontWeight="Bold"
                    Foreground="White"
                    VerticalAlignment="Center" 
@@ -135,7 +135,7 @@
                 </StackPanel>
                 <TextBlock Grid.Row="1"
                            Text="{Binding CreatedTicketToday}"
-                           FontSize="20"
+                           FontSize="40"
                            FontWeight="Bold"
                            Foreground="Black"
                            VerticalAlignment="Center" 

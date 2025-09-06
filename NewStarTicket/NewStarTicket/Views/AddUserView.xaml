@@ -43,7 +43,7 @@
                  Grid.Row="2"
                  Grid.Column="0"
                  Grid.ColumnSpan="3"
-                 Text="{Binding UserName, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding NewUserName, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Text="Email :"
                    Foreground="{StaticResource textBlockColor}"
                    Grid.Row="3"
@@ -52,13 +52,15 @@
                  Grid.Row="4"
                  Grid.Column="0"
                  Grid.ColumnSpan="3"
-                 Text="{Binding UserEmail, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding NewUserEmail, UpdateSourceTrigger=PropertyChanged}"/>
         <TextBlock Text="Niveau de COLERE :"
                    Foreground="{StaticResource textBlockColor}"
                    Grid.Row="5"
                    Grid.Column="1"/>
-        <ComboBox ItemsSource="{Binding AdminLevels}"
-                  SelectedItem="{Binding SelectedAdminLevels}"
+        <ComboBox ItemsSource="{Binding UserLevels}"
+                  SelectedValue="{Binding SelectedNewUserLevelId}"
+                  SelectedValuePath="IdUserLevel"
+                  DisplayMemberPath="NameUserLevel"
                   Grid.Row="6"
                   Grid.Column="1"/>
         <TextBlock Text="Mot de passe :"
@@ -69,7 +71,7 @@
                  Grid.Row="8"
                  Grid.Column="0"
                  Grid.ColumnSpan="3"
-                 Text="{Binding UserPassword, UpdateSourceTrigger=PropertyChanged}"/>
+                 Text="{Binding NewUserPassword, UpdateSourceTrigger=PropertyChanged}"/>
 
         <Border CornerRadius="12"
                 Background="{StaticResource whiteCardColor}"
@@ -84,7 +86,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Button Content="Valider" 
-                        Command="{Binding CreateUserCommand}" 
+                        Command="{Binding CreateNewUserCommand}" 
                         Margin="20, 5, 20, 5"
                         Background="LightGreen"
                         Grid.Column="0"/>

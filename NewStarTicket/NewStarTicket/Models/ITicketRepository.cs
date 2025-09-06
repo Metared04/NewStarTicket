@@ -11,7 +11,7 @@ namespace NewStarTicket.Models
         void Add(Ticket ticket);
         void Edit(Ticket ticket);
         void EditStatus(Ticket ticket, int newStatusId);
-        void TakingTicket(Ticket ticket, Guid IdUser);
+        public void TakingAndChangeStatusTicket(Ticket ticket, Guid IdUser, int newStatusId);
         void Remove(Ticket ticket);
         Ticket GetTicketById(Guid IdTicket);
         Ticket GetTicketByTitleTicket(string TitleTicket);

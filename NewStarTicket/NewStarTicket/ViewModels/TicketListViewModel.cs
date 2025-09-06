@@ -157,7 +157,7 @@ namespace NewStarTicket.ViewModels
             // Le status passe de 1 a 2 et on met l'id du mec
             try
             {
-                ticketRepository.TakingTicket(ticket, CurrentUserGuid);
+                ticketRepository.TakingAndChangeStatusTicket(ticket, CurrentUserGuid, 2);
                 MessageBox.Show("Ticket recuperer avec succès(?)", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
                 ticket.StatusIdTicket = 2;
                 ticket.UserResolvedIdTicket = CurrentUserGuid;
@@ -188,8 +188,15 @@ namespace NewStarTicket.ViewModels
                 if (result != MessageBoxResult.Yes) return;
                 try
                 {
-                    ticketRepository.EditStatus(ticket, 4);
-                    MessageBox.Show("Ticket validé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    if(ticket.StatusIdTicket == 1)
+                    {
+                        ticketRepository.TakingAndChangeStatusTicket(ticket, CurrentUserGuid, 4);
+                        MessageBox.Show("Ticket validé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    } else
+                    {
+                        ticketRepository.EditStatus(ticket, 4);
+                        MessageBox.Show("Ticket validé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                     ticket.StatusIdTicket = 4;
                     CommandManager.InvalidateRequerySuggested();
                 } catch (Exception ex)

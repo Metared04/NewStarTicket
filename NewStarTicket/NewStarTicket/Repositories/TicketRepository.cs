@@ -57,18 +57,38 @@ namespace NewStarTicket.Repositories
                 int rowsAffected = command.ExecuteNonQuery();
             }
         }
-        public void TakingTicket(Ticket ticket, Guid IdUser)
+        public void TakingAndChangeStatusTicket(Ticket ticket, Guid IdUser, int newStatusId)
         {
-            using (var connection = GetConnection())
-            using (var command = new SqlCommand())
+            if(newStatusId == 4 || newStatusId == 3 || newStatusId == 5)
             {
-                connection.Open();
-                command.Connection = connection;
-                command.CommandText = "UPDATE [TicketTable] Set UserResolvedIdTicket = @uid, StatusIdTicket = 2 Where IdTicket = @id";
-                command.Parameters.Add("@uid", SqlDbType.UniqueIdentifier).Value = IdUser;
-                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
-                int rowsAffected = command.ExecuteNonQuery();
+                using (var connection = GetConnection())
+                using (var command = new SqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = "UPDATE [TicketTable] Set UserResolvedIdTicket = @uid, StatusIdTicket = @newStatus, ResolvedDateTicket = @date Where IdTicket = @id";
+                    command.Parameters.Add("@uid", SqlDbType.UniqueIdentifier).Value = IdUser;
+                    command.Parameters.Add("@newStatus", SqlDbType.Int).Value = newStatusId;
+                    command.Parameters.Add("@date", SqlDbType.DateTime).Value = DateTime.Now;
+                    command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
+                    int rowsAffected = command.ExecuteNonQuery();
+                }
+            } 
+            else
+            {
+                using (var connection = GetConnection())
+                using (var command = new SqlCommand())
+                {
+                    connection.Open();
+                    command.Connection = connection;
+                    command.CommandText = "UPDATE [TicketTable] Set UserResolvedIdTicket = @uid, StatusIdTicket = @newStatus Where IdTicket = @id";
+                    command.Parameters.Add("@uid", SqlDbType.UniqueIdentifier).Value = IdUser;
+                    command.Parameters.Add("@newStatus", SqlDbType.Int).Value = newStatusId;
+                    command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = ticket.IdTicket;
+                    int rowsAffected = command.ExecuteNonQuery();
+                }
             }
+            
         }
         public IEnumerable<Ticket> GetAll()
         {

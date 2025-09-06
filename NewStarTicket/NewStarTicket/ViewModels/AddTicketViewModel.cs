@@ -35,6 +35,7 @@ namespace NewStarTicket.ViewModels
         public ICommand CreateTicketCommand { get; }
         public ICommand CloseWindowCommand { get; }
 
+        // Attributs
         public string TicketTitle
         {
             get
