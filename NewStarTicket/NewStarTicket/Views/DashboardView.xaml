@@ -199,7 +199,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Button Content="Creer un ticket"
                         Grid.Row="0"
@@ -208,10 +207,6 @@
                 <Button Content="Creer un utilisateur"
                         Grid.Row="1"
                         Command="{Binding ShowAddUserScreenCommand}"
-                        Margin="5"/>
-                <Button Content="Gerer les droits"
-                        Grid.Row="2"
-                        Command="{Binding ShowRightManagementScreenCommand}"
                         Margin="5"/>
             </Grid>
         </Border>

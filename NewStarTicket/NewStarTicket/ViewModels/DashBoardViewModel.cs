@@ -37,7 +37,6 @@ namespace NewStarTicket.ViewModels
         // Commandes
         public ICommand ShowAddTicketScreenCommand { get; }
         public ICommand ShowAddUserScreenCommand { get; }
-        public ICommand ShowRightManagementScreenCommand { get; }
 
         // Proprietes
         public int ResolvedTicketNumber 
@@ -187,7 +186,6 @@ namespace NewStarTicket.ViewModels
             // Initialisation commandes
             ShowAddTicketScreenCommand = new ViewModelCommand(ExecuteShowAddTicketScreenCommand);
             ShowAddUserScreenCommand = new ViewModelCommand(ExecuteShowAddUserScreenCommand);
-            ShowRightManagementScreenCommand = new ViewModelCommand(ExecuteShowRightManagementScreenCommand);
 
             // Chargement donnees
             LoadDashboardData(currentUserAccount);
@@ -315,9 +313,6 @@ namespace NewStarTicket.ViewModels
                 MessageBox.Show($"Droit insuffisant !", "Créer un utilisateur", MessageBoxButton.OK, MessageBoxImage.Exclamation);
             }
         }
-        private void ExecuteShowRightManagementScreenCommand(object obj)
-        {
-            MessageBox.Show($"Pas encore implementer !", "Gerer les droits", MessageBoxButton.OK, MessageBoxImage.Information);
-        }
+
     }
 }
