@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,9 +52,23 @@ namespace NewStarTicket.Repositories
             return validUser;
         }
 
-        public void Edit(User user)
+        public void Edit(User user, User newUser)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Update [UserTable] set NameUser = @name, " +
+                    "[passwordUser] = @passwd, Email = @mail, UserIdLevel = @level " +
+                    "where IdUser = @id";
+                command.Parameters.Add("@name", SqlDbType.Text).Value = newUser.NameUser;
+                command.Parameters.Add("@passwd", SqlDbType.DateTime).Value = newUser.PasswordUser;
+                command.Parameters.Add("@mail", SqlDbType.DateTime).Value = newUser.EmailUser;
+                command.Parameters.Add("@level", SqlDbType.DateTime).Value = newUser.UserIdLevel;
+                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = user.IdUser;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
         }
         public IEnumerable<User> GetByAll()
         {
@@ -64,7 +79,7 @@ namespace NewStarTicket.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "select * from [UserTable] Group by UserIdLevel";
+                command.CommandText = "select * from [UserTable] Order by UserIdLevel desc";
                 using(var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
@@ -117,7 +132,15 @@ namespace NewStarTicket.Repositories
         }
         public void Remove(Guid IdUser)
         {
-            throw new NotImplementedException();
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "Delete from [UserTable] Where IdUser = @id";
+                command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = IdUser;
+                int rowsAffected = command.ExecuteNonQuery();
+            }
         }
     }
 }

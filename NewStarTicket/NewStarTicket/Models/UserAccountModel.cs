@@ -12,6 +12,7 @@ namespace NewStarTicket.Models
         public string Username { get; set; }
         public string DisplayName { get; set; }
         public byte[] ProfilePicture { get; set; }
+        public int AdminLevel { get; set; }
         public bool IsAdmin { get; set; }
     }
 }

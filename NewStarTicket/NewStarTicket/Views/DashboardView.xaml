@@ -25,7 +25,6 @@
             <SolidColorBrush Color="DarkGray"/>
         </Grid.Background>
         
-        <TextBlock Grid.Column="1" Text="Dashboard" Foreground="LightBlue"/>
         <Border CornerRadius="12"
                 Background="{StaticResource redCardColor}"
                 Margin="10"

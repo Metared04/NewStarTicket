@@ -69,6 +69,7 @@ namespace NewStarTicket.ViewModels
         public ICommand ShowTicketListCommand { get; }
         public ICommand ShowDashboardCommand { get; }
         public ICommand ShowStatisticCommand { get; }
+        public ICommand ShowUserRightsCommand { get; }
 
         public MainViewModel()
         {
@@ -82,12 +83,25 @@ namespace NewStarTicket.ViewModels
             ShowTicketListCommand = new ViewModelCommand(ExecuteShowTicketListCommand);
             ShowDashboardCommand = new ViewModelCommand(ExecuteShowDashboardCommand);
             ShowStatisticCommand = new ViewModelCommand(ExecuteShowStatisticCommand);
+            ShowUserRightsCommand = new ViewModelCommand(ExecuteShowUserRightsCommand);
 
             // View par defaut
 
             ExecuteShowDashboardCommand(null);
 
             
+        }
+        private void ExecuteShowUserRightsCommand(object obj)
+        {
+            if (!CurrentUserAccount.IsAdmin)
+            {
+                MessageBox.Show("Vous n'avez pas les droits suffisants !");
+            } 
+            else
+            {
+                CurrentChildView = new UserRightsViewModel(CurrentUserAccount);
+                Caption = "Droits utilisateurs";
+            }
         }
 
         private void ExecuteShowStatisticCommand(object obj)
@@ -123,6 +137,7 @@ namespace NewStarTicket.ViewModels
                 CurrentUserAccount.Username = user.NameUser;
                 CurrentUserAccount.DisplayName = $"Bonjour, {user.NameUser}, {user.EmailUser}, {user.IsAdmin}";
                 CurrentUserAccount.ProfilePicture = null;
+                CurrentUserAccount.AdminLevel = user.UserIdLevel;
                 CurrentUserAccount.IsAdmin = user.IsAdmin;
             } else
             {

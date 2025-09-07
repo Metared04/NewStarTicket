@@ -28,6 +28,10 @@
             <views:StatisticView/>
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewModel:UserRightsViewModel}">
+            <views:UserRightsView/>
+        </DataTemplate>
+
     </Window.Resources>
 
     <Grid>
@@ -41,12 +45,14 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.Background>
-            <ImageBrush ImageSource="/Assets/Images/back-image1.png" Stretch="UniformToFill"/>
+            <ImageBrush ImageSource="/Assets/Images/back-image1.png" 
+                        Stretch="UniformToFill"/>
         </Grid.Background>
 
         <StackPanel Grid.Row="0"
                     Grid.Column="0">
-            <Image Source="/Assets/Images/logo2.png" Width="125"/>
+            <Image Source="/Assets/Images/logo2.png" 
+                   Width="125"/>
         </StackPanel>
 
         <!-- Message de bienvenu -->
@@ -72,6 +78,7 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
             
                 <RadioButton Style="{StaticResource menuButton}" 
@@ -79,19 +86,29 @@
                              Command="{Binding ShowDashboardCommand}"
                              IsChecked="True"
                              Grid.Column="0">
-                    <TextBlock Text="Tabeau de bord" Style="{StaticResource menuButtonText}"/>
+                    <TextBlock Text="Tabeau de bord" 
+                               Style="{StaticResource menuButtonText}"/>
                 </RadioButton>
                 <RadioButton Style="{StaticResource menuButton}" 
                              Tag="{StaticResource whiteColor}"
                              Command="{Binding ShowTicketListCommand}"
                              Grid.Column="1">
-                    <TextBlock Text="Ticket" Style="{StaticResource menuButtonText}"/>
+                    <TextBlock Text="Ticket" 
+                               Style="{StaticResource menuButtonText}"/>
                 </RadioButton>
                 <RadioButton Style="{StaticResource menuButton}" 
                              Tag="{StaticResource whiteColor}"
                              Command="{Binding ShowStatisticCommand}"
                              Grid.Column="2">
-                    <TextBlock Text="Statistiques" Style="{StaticResource menuButtonText}"/>
+                    <TextBlock Text="Statistiques" 
+                               Style="{StaticResource menuButtonText}"/>
+                </RadioButton>
+                <RadioButton Style="{StaticResource menuButton}" 
+                             Tag="{StaticResource whiteColor}"
+                             Command="{Binding ShowUserRightsCommand}"
+                             Grid.Column="3">
+                    <TextBlock Text="Droits utilisateur" 
+                               Style="{StaticResource menuButtonText}"/>
                 </RadioButton>
             </Grid>
         </StackPanel>
