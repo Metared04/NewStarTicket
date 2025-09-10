@@ -20,6 +20,7 @@ namespace NewStarTicket.ViewModels
         private bool _isCurrentUserAdmin;
 
         private ViewModelBase _userInfosView;
+        private ViewModelBase _editInfosView;
 
         private IUserRepository userRepository;
 
@@ -71,7 +72,19 @@ namespace NewStarTicket.ViewModels
                 OnPropertyChanged(nameof(UserInfosView));
             }
         }
-        
+        public ViewModelBase EditInfosView
+        {
+            get
+            {
+                return _editInfosView;
+            }
+            set
+            {
+                _editInfosView = value;
+                OnPropertyChanged(nameof(EditInfosView));
+            }
+        }
+
         // Commandes
         public ICommand ShowUserInfosCommand { get; }
         public ICommand EditUserInfosCommand { get; }
@@ -114,7 +127,17 @@ namespace NewStarTicket.ViewModels
         }
         private void ExecuteEditUserInfosCommand(object obj)
         {
-            MessageBox.Show("Je dois modifier.");
+            var user = obj as User;
+            if (user == null) return;
+
+            var EditInfosView = new EditUserInfosViewModel(user);
+            var window = new EditUserInfosView
+            {
+                DataContext = EditInfosView,
+                Owner = Application.Current.MainWindow
+            };
+            window.ShowDialog();
+            LoadUserList();
         }
         private bool CanExecuteEditUserInfosCommand(object obj)
         {
@@ -124,13 +147,13 @@ namespace NewStarTicket.ViewModels
         {
             var user = obj as User;
             if (user == null) return;
-            var result = MessageBox.Show($"Supprimer le ticket \"{user.NameUser}\" ?", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            var result = MessageBox.Show($"Supprimer \"{user.NameUser}\" ?", "Confirmation suppression", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result != MessageBoxResult.Yes) return;
             try
             {
                 userRepository.Remove(user.IdUser);
                 CurrentUserList.Remove(user);
-                MessageBox.Show("Ticket supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Utilisateur supprimé avec succès.", "Succès", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {

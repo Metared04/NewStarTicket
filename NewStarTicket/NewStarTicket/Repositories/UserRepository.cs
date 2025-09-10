@@ -62,10 +62,10 @@ namespace NewStarTicket.Repositories
                 command.CommandText = "Update [UserTable] set NameUser = @name, " +
                     "[passwordUser] = @passwd, Email = @mail, UserIdLevel = @level " +
                     "where IdUser = @id";
-                command.Parameters.Add("@name", SqlDbType.Text).Value = newUser.NameUser;
-                command.Parameters.Add("@passwd", SqlDbType.DateTime).Value = newUser.PasswordUser;
-                command.Parameters.Add("@mail", SqlDbType.DateTime).Value = newUser.EmailUser;
-                command.Parameters.Add("@level", SqlDbType.DateTime).Value = newUser.UserIdLevel;
+                command.Parameters.Add("@name", SqlDbType.NVarChar, 100).Value = newUser.NameUser;
+                command.Parameters.Add("@passwd", SqlDbType.NVarChar, 200).Value = newUser.PasswordUser;
+                command.Parameters.Add("@mail", SqlDbType.NVarChar, 200).Value = newUser.EmailUser;
+                command.Parameters.Add("@level", SqlDbType.Int).Value = newUser.UserIdLevel;
                 command.Parameters.Add("@id", SqlDbType.UniqueIdentifier).Value = user.IdUser;
                 int rowsAffected = command.ExecuteNonQuery();
             }
